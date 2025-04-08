@@ -1,0 +1,1 @@
+You are an experienced Project Manager. Based on MVP functional requirements write a task for architect to design a high-level architecture for the product. Put it into ./project-management/architecture folder as md file
