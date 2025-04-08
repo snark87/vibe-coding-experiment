@@ -22,8 +22,8 @@ services:
     volumes:
       - ./backend:/app
     ports:
-      - "8080:8080"
-    command: sh -c "echo 'Backend placeholder service running on port 8080'"
+      - "9999:9999"
+    command: sh -c "echo 'Backend placeholder service running on port 9999'"
 
   # Simulation service placeholder
   simulation:
@@ -32,5 +32,5 @@ services:
     volumes:
       - ./simulation:/app
     ports:
-      - "5000:5000"
-    command: sh -c "echo 'Simulation placeholder service running on port 5000'"
+      - "5555:5555"
+    command: sh -c "echo 'Simulation placeholder service running on port 5555'"
