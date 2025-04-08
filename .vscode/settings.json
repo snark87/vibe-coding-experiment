@@ -1,0 +1,11 @@
+{
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#521341",
+        "titleBar.activeBackground": "#731B5B",
+        "titleBar.activeForeground": "#FDF8FC"
+    },
+    "chat.agent.enabled": true,
+    "github.copilot.excludePatterns": [
+        "**/prompts/**"
+    ]
+}
