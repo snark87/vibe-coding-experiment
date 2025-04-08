@@ -18,24 +18,11 @@ This project provides a user-friendly interface for designing, editing, and visu
 
 ### Prerequisites
 
-- Node.js (version X.X.X)
-- [Additional dependencies to be determined]
+[to be added]
 
 ### Installation
 
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/quantum-circuit-editor.git
-
-# Navigate to the project directory
-cd quantum-circuit-editor
-
-# Install dependencies
-npm install
-
-# Start the application
-npm start
-```
+[to be added]
 
 ## Usage
 
