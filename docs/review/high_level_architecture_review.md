@@ -43,45 +43,72 @@ This document provides a critical review of the high-level architecture for the 
    - Cross-language integration will create friction in development and deployment
    - Consider consolidating to fewer languages (e.g., Python with Flask for backend and simulation)
 
+Comment: consider it is a must. A team is good at Go programming, and Python is choosing for its existing libraries.
+
 2. **Simulation Performance Risk**
    - The document doesn't address computational requirements for quantum simulation
    - Even "small" circuits of 5 qubits require significant processing power (2^5 = 32 state vectors)
    - Client-server latency could make the interactive experience frustrating
+
+Comment: We validate this in MVC
 
 3. **Over-engineering for MVP**
    - The proposed multi-tier architecture may be excessive for an educational tool MVP
    - Containerized microservices add operational complexity that may not be justified
    - Consider a monolithic approach for faster development and simpler deployment
 
+Comment: Correct, it's worth to simplify for MVP
+
 4. **Missing Technical Trade-offs**
    - No discussion of alternatives considered or rejected
    - No analysis of the cost implications of various architectural choices
    - Lacks benchmarks or reference points for performance expectations
 
+Comment: Correct, let's add them.
+
 5. **Authentication Complexity**
    - Using third-party auth introduces dependencies and potential privacy concerns for educational use
    - Consider whether anonymous/local usage might be preferable for an educational MVP
+
+Comment: We don't need focus on privacy. Authorization is crucial as we want to track consumed resources per user and count users as metrics.
 
 6. **Deployment Ambiguity**
    - Cloud provider selection missing (costs vary significantly between providers)
    - Resource requirements not estimated (CPU/memory for simulation)
    - No clear strategy for development/staging/production environments
 
+Comment: We need to address it if possible or add TODO remarks
+
 7. **Frontend State Management Underspecified**
    - Circuit state management will be complex (history, undo/redo, validation)
    - "React's built-in state management" may be insufficient
    - Needs more detailed specification of state flow
 
+Comment: We need to address it or add TODO remark
+
 8. **Missing Offline Capabilities**
    - No mention of offline support for educational environments with limited connectivity
    - Consider whether a progressive web app approach might benefit educational users
 
+Comment: don't focus on offline support for MVP
+
 ## Strategic Questions
 
 1. Is a web application the right approach for educational quantum computing?
+
+Answer: yes
+
 2. Have we validated that students prefer this approach over desktop applications?
+
+Answer: we always can make desktop app from web-first one
+
 3. What are the actual performance requirements to ensure good UX for the simulation?
+
+Answer: MVP will validate this
+
 4. Have we assessed the total cost of ownership across development and hosting?
+
+Answer: Address it or add TODO remark
 
 ## Prioritized Next Steps
 
@@ -94,6 +121,8 @@ Based on the TODOs in the architecture document and this review, we recommend pr
 5. Conducting a deeper security analysis
 6. Evaluating technology stack consolidation options
 7. Benchmarking simulation performance requirements
+
+Comment: Address it later
 
 ## Conclusion
 
