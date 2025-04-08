@@ -1,8 +1,10 @@
-# Quantum Circuit Editor - High-Level Architecture
+# Quantum Circuit Editor - High-Level Architecture (Updated)
 
 ## 1. Introduction
 
 This document outlines the high-level architecture for the Quantum Circuit Editor MVP, an educational tool for students and quantum computing enthusiasts with little to no prior quantum computing or programming experience. The architecture described here is designed to fulfill the functional requirements specified in the MVP documentation while providing a foundation that can scale for future enhancements.
+
+This is an updated version that addresses the review feedback from the architecture review document.
 
 ## 2. Key Use Cases
 
@@ -142,7 +144,9 @@ The Quantum Circuit Editor is a web-based application that enables users to:
 - Visualize simulation results as probability distributions
 - Save, load, and export circuit designs
 
-The system architecture follows a multi-tier approach with clear separation of concerns:
+### 3.1 Architectural Approach: Simplified Monolith for MVP
+
+Based on the architecture review, we're adopting a simplified monolithic approach for the MVP to reduce complexity and accelerate development:
 
 ```puml
 @startuml
@@ -153,9 +157,9 @@ rectangle "Domain Layer" as DomainLayer
 
 ' Implementation components
 rectangle "Frontend\n(TypeScript/React)" as Frontend
-rectangle "Backend Services\n(Go)" as Backend
-rectangle "Persistence Layer" as Persistence
-rectangle "Quantum Simulation Engine\n(Python)" as SimulationEngine
+rectangle "Backend API\n(Go)" as Backend
+rectangle "Persistence" as Persistence
+rectangle "Quantum Simulation Module\n(Python API)" as SimulationEngine
 
 ' Connections between layers
 PresentationLayer <--> ApplicationLayer
@@ -173,9 +177,26 @@ DomainLayer -[hidden]d- Persistence
 @enduml
 ```
 
-## 3. Component Architecture
+### 3.2 Technology Stack Justification
 
-### 3.1 Frontend (TypeScript + React)
+While we're using three different languages (TypeScript, Go, Python), this is based on the following justifications:
+
+- **Frontend (TypeScript/React)**: Team has strong expertise and the interactive nature of the application requires a robust UI framework
+- **Backend (Go)**: Team has expertise in Go, which offers excellent performance for web services and API handling
+- **Simulation (Python)**: Leveraging existing Python quantum computing libraries (like Qiskit or Cirq) rather than building simulation capabilities from scratch
+
+### 3.3 Cross-Language Integration Strategy
+
+To mitigate the complexity of the multi-language approach, we'll implement:
+
+- A clean, well-defined API between components
+- A simple REST API for Frontend-Backend communication
+- Python simulation code exposed as a straightforward HTTP service
+- Comprehensive integration tests and documentation
+
+## 4. Component Architecture
+
+### 4.1 Frontend (TypeScript + React)
 
 The frontend is responsible for the user interface and direct user interactions. It is built using TypeScript and React to leverage the team's expertise.
 
@@ -205,65 +226,119 @@ Key components:
 
 State management will be handled using React's built-in state management capabilities, with a centralized state for the circuit representation.
 
-TODO: Define specific React component hierarchy and interactions. Consider whether a state management library is needed for more complex state.
+#### 4.1.1 State Management Strategy
 
-### 3.2 Backend Services (Go)
+For the MVP, we'll use React Context API combined with useReducer for managing the quantum circuit state:
+
+```typescript
+// Simplified state management approach
+interface CircuitState {
+  qubits: number;
+  gates: Gate[];
+  simulationResults: SimulationResult | null;
+  isDirty: boolean;
+  history: CircuitHistoryState[];
+  historyIndex: number;
+}
+
+// Actions for state management
+type CircuitAction = 
+  | { type: 'ADD_GATE', gate: Gate }
+  | { type: 'REMOVE_GATE', gateId: string }
+  | { type: 'MOVE_GATE', gateId: string, newPosition: Position }
+  | { type: 'SET_SIMULATION_RESULTS', results: SimulationResult }
+  | { type: 'UNDO' }
+  | { type: 'REDO' };
+```
+
+This approach provides:
+- Circuit state tracking
+- Undo/redo functionality
+- Change detection for save prompts
+- Centralized state for all components
+
+### 4.2 Backend Services (Go)
 
 The backend services handle business logic, user authentication, and coordination between the frontend and the quantum simulation engine.
+
+For the MVP, we'll implement a simplified monolithic backend in Go:
 
 ```puml
 @startuml
 package "Backend Services (Go)" {
-  [API Gateway] as API
+  [HTTP Router] as Router
   [Authentication Service] as Auth
   [Circuit Manager] as CircuitMgr
-  [Simulation Coordinator] as SimCoord
+  [Simulation API Client] as SimClient
+  [Database Access Layer] as DAL
   
-  API --> Auth
-  API --> CircuitMgr
-  API --> SimCoord
+  Router --> Auth
+  Router --> CircuitMgr
+  Router --> SimClient
+  CircuitMgr --> DAL
 }
 @enduml
 ```
 
 Key components:
-- **API Gateway**: Entry point for frontend requests
-- **Authentication Service**: Manages user authentication with Google or similar services
+- **HTTP Router**: Entry point for frontend requests
+- **Authentication Service**: Manages user authentication with Google
 - **Circuit Manager**: Handles saving, loading, and validating circuit designs
-- **Simulation Coordinator**: Coordinates simulation requests and results
+- **Simulation API Client**: Communicates with the Python simulation service
+- **Database Access Layer**: Handles persistence operations
 
-TODO: Define API endpoints and service boundaries in more detail. Consider security measures for the API.
+#### 4.2.1 API Endpoints
 
-### 3.3 Quantum Simulation Engine (Python)
+The backend will expose the following RESTful endpoints:
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/auth/login` | POST | Authenticate user with Google |
+| `/api/auth/logout` | POST | Log out current user |
+| `/api/circuits` | GET | Get list of user's circuits |
+| `/api/circuits` | POST | Create new circuit |
+| `/api/circuits/{id}` | GET | Get specific circuit |
+| `/api/circuits/{id}` | PUT | Update circuit |
+| `/api/circuits/{id}` | DELETE | Delete circuit |
+| `/api/simulate` | POST | Run circuit simulation |
+| `/api/export/qasm` | POST | Convert circuit to QASM |
+
+### 4.3 Quantum Simulation Module (Python)
 
 The quantum simulation engine is responsible for the scientific calculations required to simulate quantum circuits.
 
+The simulation module will be a lightweight HTTP service exposing Python-based quantum simulation:
+
 ```puml
 @startuml
-package "Quantum Simulation Engine (Python)" {
+package "Quantum Simulation Module (Python)" {
+  [HTTP API] as API
+  [Circuit Validator] as Validator
   [Circuit Simulator] as Simulator
-  [State Vector Calculator] as StateCalc
-  [Probability Distribution Generator] as ProbGen
-  [QASM Translator] as QASMTrans
+  [Visualization Helper] as Visualizer
+  [QASM Generator] as QASMGen
   
-  Simulator --> StateCalc
-  StateCalc --> ProbGen
-  Simulator --> QASMTrans
+  API --> Validator
+  API --> Simulator
+  API --> Visualizer
+  API --> QASMGen
 }
 @enduml
 ```
 
-Key components:
-- **Circuit Simulator**: Core component that executes the quantum circuit simulation
-- **State Vector Calculator**: Calculates the quantum state vector based on the circuit
-- **Probability Distribution Generator**: Generates measurement outcome probabilities
-- **QASM Translator**: Handles export to QASM format
+#### 4.3.1 Simulation Performance Considerations
 
-TODO: Research existing Python libraries for quantum simulation that could be leveraged. Define optimization strategies for matrix operations.
+For the MVP with 2-5 qubits:
+- State vectors are manageable (2^5 = 32 amplitudes)
+- Matrix operations use NumPy for optimization
+- Precomputed gate operations reduce calculation time
+- Response time targets < 500ms for typical circuits
 
-## 4. Data Architecture
+We'll leverage an existing quantum computing library like Qiskit, which is optimized for these types of calculations.
 
-### 4.1 Circuit Data Model
+## 5. Data Architecture
+
+### 5.1 Circuit Data Model
 
 ```puml
 @startuml
@@ -273,16 +348,13 @@ class Circuit {
   +description: String
   +creationDate: DateTime
   +lastModified: DateTime
-  +qubits: List<Qubit>
+  +userId: String
+  +qubits: Integer
   +gates: List<Gate>
 }
 
-class Qubit {
-  +id: Integer
-  +label: String
-}
-
 class Gate {
+  +id: UUID
   +type: GateType
   +position: Integer
   +targets: List<Integer>
@@ -297,132 +369,223 @@ enum GateType {
   CNOT
 }
 
-Circuit "1" *-- "2..5" Qubit
 Circuit "1" *-- "*" Gate
 Gate -- GateType
 @enduml
 ```
 
-The quantum circuit is the central data structure in the system:
-- **Qubits**: Representation of quantum bits (2-5 for MVP)
-- **Gates**: Quantum operations (X, Y, Z, H, CNOT)
-- **Connections**: Relationships between gates and qubits
-- **Metadata**: Information about the circuit (name, description, creation date)
+### 5.2 Database Selection: PostgreSQL
 
-### 4.2 Storage Solution
+For the MVP, we'll use PostgreSQL as our database for several reasons:
+- Strong support for JSON data types (for storing circuit configurations)
+- ACID compliance for data integrity
+- Excellent support in Go ecosystem
+- Familiar to the development team
+- Easy to host in cloud environments
 
-The system will use a database to store:
-- User information
-- Circuit designs
-- Simulation results (optional)
+## 6. Integration Architecture
 
-TODO: Decide on specific database technology based on scalability needs and team expertise.
-
-## 5. Integration Architecture
-
-### 5.1 Frontend-Backend Integration
+### 6.1 Frontend-Backend Integration
 
 ```puml
 @startuml
+participant "React Frontend" as Frontend
+participant "Go Backend" as Backend
+participant "Python Simulation" as Simulation
+database "PostgreSQL" as DB
+
+Frontend -> Backend: HTTP Request (JSON)
+Backend -> DB: Query/Update
+DB --> Backend: Result
+Backend -> Simulation: Simulation Request (JSON)
+Simulation --> Backend: Simulation Results (JSON)
+Backend --> Frontend: HTTP Response (JSON)
+@enduml
+```
+
+### 6.2 Authentication Flow
+
+```puml
+@startuml
+actor User
 participant "Frontend" as Frontend
-participant "Backend API" as API
-participant "Circuit Manager" as CircuitMgr
-participant "Simulation Engine" as SimEngine
+participant "Google OAuth" as OAuth
+participant "Backend" as Backend
 
-Frontend -> API: HTTP Request
-API -> CircuitMgr: Process Request
-API -> SimEngine: Simulation Request
-SimEngine --> API: Simulation Result
-API --> Frontend: HTTP Response
-
-Frontend <-> API: WebSocket (if needed)
+User -> Frontend: Click "Login with Google"
+Frontend -> OAuth: Redirect to Google Auth
+User -> OAuth: Enter credentials
+OAuth --> Frontend: Auth code
+Frontend -> Backend: Auth code
+Backend -> OAuth: Verify token
+OAuth --> Backend: User info
+Backend -> Backend: Create session
+Backend --> Frontend: JWT token
+Frontend -> Frontend: Store token
 @enduml
 ```
 
-Communication between the frontend and backend will be achieved through:
-- RESTful API for standard operations
-- WebSocket for real-time updates (if needed)
+## 7. Deployment Architecture
 
-### 5.2 Backend-Simulation Integration
-
-The Go backend will integrate with the Python simulation engine through:
-- A well-defined API contract
-- Serialized data format (JSON or Protocol Buffers)
-
-TODO: Evaluate performance implications of cross-language integration and determine the most efficient approach.
-
-## 6. Deployment Architecture
+For the MVP, we'll use a simplified deployment architecture:
 
 ```puml
 @startuml
-cloud "Cloud Infrastructure" {
-  node "CDN" as CDN {
-    [Static Assets]
+cloud "Google Cloud Platform" {
+  node "Cloud Run" as FrontendService {
+    [Frontend Container]
   }
   
-  node "Application Server" as AppServer {
-    [Backend Services]
+  node "Cloud Run" as BackendService {
+    [Backend Container]
   }
   
-  node "Simulation Server" as SimServer {
-    [Quantum Simulation Engine]
+  node "Cloud Run" as SimulationService {
+    [Simulation Container]
   }
   
-  database "Database" as DB {
-    [User Data]
-    [Circuit Data]
+  database "Cloud SQL" as DB {
+    [PostgreSQL]
   }
   
-  actor "User" as User
-  
-  User --> CDN: Access Frontend
-  User --> AppServer: API Requests
-  AppServer --> DB: Store/Retrieve Data
-  AppServer --> SimServer: Simulation Requests
-  
-  node "Auth Provider" as Auth {
-    [Google Auth]
-  }
-  
-  User --> Auth: Authentication
-  Auth --> AppServer: Auth Token
+  FrontendService --> BackendService: API calls
+  BackendService --> SimulationService: Simulation requests
+  BackendService --> DB: Data persistence
 }
+
+actor "User" as User
+User --> FrontendService: Web access
+
+node "Auth Provider" as Auth {
+  [Google Auth]
+}
+
+User --> Auth: Authentication
+Auth --> BackendService: Auth Token
 @enduml
 ```
 
-The system will be deployed as a cloud-based web application:
-- Frontend assets served from a CDN
-- Backend services deployed as containerized applications
-- Simulation engine deployed as a separate service
+### 7.1 Resource Estimates
 
-Authentication will be implemented using Google or similar third-party providers.
+| Component | Resources | Estimated Monthly Cost |
+|-----------|-----------|------------------------|
+| Frontend | 1 Cloud Run instance | ~$15-30 |
+| Backend | 1 Cloud Run instance | ~$15-30 |
+| Simulation | 1 Cloud Run instance | ~$20-40 |
+| Database | Small Cloud SQL instance | ~$25-50 |
+| Storage | 10GB | ~$2-5 |
+| **Total** | | **~$77-155** |
 
-TODO: Define specific cloud infrastructure components and configuration. Research cost-effective hosting solutions for educational use cases.
+This estimate assumes modest usage for an educational MVP. Actual costs will depend on traffic patterns.
 
-## 7. Security Considerations
+## 8. Security Considerations
 
-### 7.1 Authentication and Authorization
+### 8.1 Authentication and Authorization
 
-- User authentication via Google or similar services
-- Basic authorization for accessing own circuits
-
-### 7.2 Data Protection
-
-- Secure storage of user data
+- User authentication via Google OAuth 2.0
+- JWT tokens for session management
+- Role-based access control for circuit ownership
 - HTTPS for all communications
+- API rate limiting to prevent abuse
 
-TODO: Conduct a more thorough security analysis and identify potential vulnerabilities.
+### 8.2 Data Protection
 
-## 8. Performance Considerations
+- Encryption at rest for database
+- Input validation and sanitization for all API endpoints
+- CSRF protection for web forms
+- Security headers for frontend (Content Security Policy, etc.)
 
-While exact performance metrics are not critical for the MVP, the architecture should:
-- Support responsive UI interactions
-- Handle simulation of small circuits (2-5 qubits) efficiently
-- Support multiple concurrent users
+## 9. Error Handling
 
-TODO: Define performance benchmarks and optimization strategies, especially for the simulation engine.
+### 9.1 Frontend Error Handling
 
-## 9. Future Extensibility
+- Graceful error displays for users
+- Connectivity loss handling with retry mechanisms
+- Form validation with clear user feedback
+- Client-side validation to catch errors early
+
+### 9.2 Backend Error Handling
+
+- Structured error responses (status code, message, details)
+- Comprehensive error logging
+- Graceful degradation when simulation service is unavailable
+- Rate limiting with appropriate error messages
+
+### 9.3 Simulation Error Handling
+
+- Validation of circuit configurations before simulation
+- Timeouts for long-running simulations
+- Graceful error messages for invalid quantum operations
+
+## 10. Testing Strategy
+
+### 10.1 Frontend Testing
+
+- Unit tests for React components using Jest and React Testing Library
+- Integration tests for state management logic
+- End-to-end tests using Cypress for critical user flows
+
+### 10.2 Backend Testing
+
+- Unit tests for business logic and API handlers
+- Integration tests for database operations
+- API contract tests to verify endpoint behavior
+
+### 10.3 Simulation Testing
+
+- Unit tests for quantum operations
+- Validation tests against known quantum circuits with verified outputs
+- Performance tests for various circuit sizes
+
+## 11. Monitoring and Observability
+
+### 11.1 Application Monitoring
+
+- Request/response metrics for API endpoints
+- Error rate tracking
+- User activity metrics (circuits created, simulations run)
+- Performance metrics for simulation operations
+
+### 11.2 Infrastructure Monitoring
+
+- CPU/memory usage for services
+- Database performance metrics
+- API latency tracking
+- Error logs aggregation
+
+We'll implement monitoring using Google Cloud Monitoring for the MVP.
+
+## 12. Local Development Setup
+
+For local development, we'll provide:
+
+- Docker Compose configuration for running all services locally
+- Development documentation with setup instructions
+- Seeded database with sample circuits
+- Environment configuration templates
+- Local authentication bypass option for easier development
+
+## 13. Technical Trade-offs and Alternatives
+
+### 13.1 Technology Stack Alternatives Considered
+
+| Component | Selected | Alternatives | Rationale |
+|-----------|----------|--------------|-----------|
+| Frontend | React + TypeScript | Vue.js, Angular | Team expertise, strong ecosystem |
+| Backend | Go | Node.js, Python | Team expertise, performance |
+| Simulation | Python | Julia, C++ | Existing libraries, scientific computing strength |
+| Database | PostgreSQL | MongoDB, MySQL | JSON support, reliability |
+
+### 13.2 Architecture Alternatives
+
+| Aspect | Selected | Alternative | Rationale |
+|--------|----------|-------------|-----------|
+| Overall Architecture | Simplified Monolith | Microservices | Reduced complexity for MVP |
+| Frontend State | Context+Reducer | Redux, MobX | Simpler learning curve, sufficient for MVP |
+| API Style | REST | GraphQL | Familiarity, simplicity |
+| Deployment | Cloud Run | Kubernetes | Easier operations, automatic scaling |
+
+## 14. Future Extensibility
 
 The architecture is designed to accommodate future enhancements:
 - Support for additional quantum gates
@@ -430,13 +593,29 @@ The architecture is designed to accommodate future enhancements:
 - More advanced visualization features
 - Collaboration features
 
-TODO: Identify potential bottlenecks that might limit scalability.
+### 14.1 Potential Scaling Considerations
 
-## 10. Open Questions and Considerations
+- Separating services for better scalability when needed
+- Adding caching for frequently accessed circuits
+- Optimizing database queries as the number of users grows
+- Adding more sophisticated authentication and sharing options
 
-- Should the simulation be performed client-side or server-side?
-- What is the expected user load and how will this affect infrastructure needs?
-- How should we handle error cases in simulation (invalid circuits, etc.)?
+## 15. Open Questions and Next Steps
+
+### 15.1 Open Questions
+
+- What are typical classroom usage patterns that might create usage spikes?
 - What level of detail should be provided in the tutorial system?
+- How important is real-time collaboration for educational use cases?
 
-TODO: Schedule architecture review meeting to discuss these open questions with the product and development teams.
+### 15.2 Next Steps
+
+1. Finalize database schema design
+2. Create detailed API specifications
+3. Develop proof-of-concept for quantum simulation service
+4. Implement authentication flow
+5. Create UI mockups and component structure
+
+## 16. Conclusion
+
+This updated architecture document provides a balanced approach for the Quantum Circuit Editor MVP, addressing the review concerns while maintaining the core educational objectives of the application. By simplifying the deployment architecture, clarifying cross-service communication, and providing more detailed implementation guidance, we've created a more feasible plan for delivering a valuable educational tool.
