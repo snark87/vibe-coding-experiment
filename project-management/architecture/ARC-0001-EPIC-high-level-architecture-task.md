@@ -1,3 +1,9 @@
+---
+track: ARCHITECT
+task_type: EPIC
+task_id: ARC-0001
+state: TODO
+---
 # High-Level Architecture Design Task
 
 ## Overview
