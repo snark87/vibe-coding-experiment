@@ -1,0 +1,36 @@
+services:
+  # Frontend service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://backend:8080
+    depends_on:
+      - backend
+
+  # Backend service placeholder
+  backend:
+    image: golang:1.19-alpine
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8080:8080"
+    command: sh -c "echo 'Backend placeholder service running on port 8080'"
+
+  # Simulation service placeholder
+  simulation:
+    image: python:3.10-slim
+    working_dir: /app
+    volumes:
+      - ./simulation:/app
+    ports:
+      - "5000:5000"
+    command: sh -c "echo 'Simulation placeholder service running on port 5000'"
