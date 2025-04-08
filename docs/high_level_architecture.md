@@ -4,7 +4,137 @@
 
 This document outlines the high-level architecture for the Quantum Circuit Editor MVP, an educational tool for students and quantum computing enthusiasts with little to no prior quantum computing or programming experience. The architecture described here is designed to fulfill the functional requirements specified in the MVP documentation while providing a foundation that can scale for future enhancements.
 
-## 2. System Overview
+## 2. Key Use Cases
+
+Before diving into the technical architecture, it's important to understand the primary use cases that drive the system design. These use cases represent the core interactions that users will have with the Quantum Circuit Editor.
+
+```puml
+@startuml
+left to right direction
+actor "Student/Educator" as User
+
+rectangle "Quantum Circuit Editor" {
+  usecase "Create New Circuit" as UC1
+  usecase "Add/Remove Quantum Gates" as UC2
+  usecase "Simulate Circuit" as UC3
+  usecase "View Simulation Results" as UC4
+  usecase "Save Circuit" as UC5
+  usecase "Load Existing Circuit" as UC6
+  usecase "Export Circuit to QASM" as UC7
+}
+
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
+User --> UC6
+User --> UC7
+
+UC2 ..> UC1 : <<extends>>
+UC3 ..> UC2 : <<includes>>
+UC4 ..> UC3 : <<includes>>
+@enduml
+```
+
+### 2.1 Primary Use Cases
+
+1. **Create New Circuit**
+   - User creates a blank quantum circuit with 2-5 qubits
+   - User sets basic circuit parameters (e.g., number of qubits)
+   - System displays an empty circuit with the specified number of qubit lines
+
+2. **Add/Remove Quantum Gates**
+   - User drags quantum gates (X, Y, Z, H, CNOT) from the gate palette onto qubit lines
+   - User removes gates by dragging them off the circuit or using a delete function
+   - User repositions gates on the circuit canvas
+   - System provides visual feedback during the drag-and-drop operations
+   - System validates gate placement and connections
+
+3. **Simulate Circuit**
+   - User clicks a "Simulate" button to run the quantum simulation
+   - System processes the circuit through the simulation engine
+   - System calculates the quantum state and measurement probabilities
+   - System indicates simulation progress during calculation
+
+4. **View Simulation Results**
+   - System displays the probability distribution of possible measurement outcomes
+   - User interprets the simulation results to understand circuit behavior
+   - User can toggle between different visualization modes (if available in MVP)
+
+5. **Save Circuit**
+   - User saves the current circuit design to their account
+   - User provides a name and optional description for the circuit
+   - System confirms successful save operation
+   - System associates the circuit with the user's account
+
+6. **Load Existing Circuit**
+   - User views a list of their previously saved circuits
+   - User selects a circuit to load
+   - System loads the circuit data and displays it on the canvas
+   - User continues editing the loaded circuit
+
+7. **Export Circuit to QASM**
+   - User exports the current circuit to QASM format
+   - System generates the QASM representation of the circuit
+   - User downloads or copies the QASM code for use in other tools
+
+### 2.2 User Flows
+
+The following sequence diagrams illustrate the typical flow for two key user journeys:
+
+#### 2.2.1 Circuit Design and Simulation Flow
+
+```puml
+@startuml
+actor User
+participant "Circuit Canvas" as Canvas
+participant "Gate Palette" as Palette
+participant "Simulation Engine" as Engine
+participant "Results Visualizer" as Results
+
+User -> Canvas: Create new circuit
+User -> Palette: Select X gate
+User -> Canvas: Place X gate on qubit 1
+User -> Palette: Select H gate
+User -> Canvas: Place H gate on qubit 2
+User -> Palette: Select CNOT gate
+User -> Canvas: Connect qubits 1 and 2 with CNOT
+User -> Canvas: Request simulation
+Canvas -> Engine: Send circuit for simulation
+Engine -> Engine: Perform quantum calculation
+Engine -> Results: Return probability distribution
+Results -> User: Display measurement outcomes
+@enduml
+```
+
+#### 2.2.2 Save and Export Flow
+
+```puml
+@startuml
+actor User
+participant "Circuit Canvas" as Canvas
+participant "Control Panel" as Panel
+participant "Backend Services" as Backend
+participant "Storage" as Storage
+
+User -> Canvas: Create/modify circuit
+User -> Panel: Click "Save Circuit"
+Panel -> User: Prompt for circuit name/description
+User -> Panel: Enter circuit information
+Panel -> Backend: Send save request
+Backend -> Storage: Store circuit data
+Storage -> Backend: Confirm save
+Backend -> Panel: Return success message
+Panel -> User: Show success notification
+User -> Panel: Click "Export to QASM"
+Panel -> Backend: Request QASM conversion
+Backend -> Panel: Return QASM code
+Panel -> User: Display/download QASM code
+@enduml
+```
+
+## 3. System Overview
 
 The Quantum Circuit Editor is a web-based application that enables users to:
 - Create and edit quantum circuits through a drag-and-drop interface
