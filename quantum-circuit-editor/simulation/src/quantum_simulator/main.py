@@ -15,7 +15,7 @@ class Simulation:
 
     def __init__(self, config: SimulationConfig = None):
         self.config = config or SimulationConfig()
-        logger.info(f"Simulation initialized with config: {self.config}")
+        logger.info("Simulation initialized with config: %s", self.config)
 
     def run(self):
         """Run the simulation."""
@@ -23,12 +23,16 @@ class Simulation:
         # Placeholder for simulation logic
         return {"status": "success", "message": "Simulation completed"}
 
+    def get_config(self):
+        """Return the current simulation configuration."""
+        return self.config
+
 
 def main():
     """Entry point when run as script."""
     sim = Simulation()
     result = sim.run()
-    logger.info(f"Simulation result: {result}")
+    logger.info("Simulation result: %s", result)
     return result
 
 

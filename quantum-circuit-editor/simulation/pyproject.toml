@@ -39,7 +39,7 @@ python_functions = "test_*"
 
 # Linting
 [tool.pylint.messages_control]
-disable = "C0111,C0103,C0330,C0326"
+disable = "C0111,C0103"
 
 [tool.pylint.format]
 max-line-length = "88"
