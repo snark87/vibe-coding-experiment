@@ -2,7 +2,7 @@
 track: ARCHITECT
 task_type: TASK
 task_id: ARC-0006
-state: IN PROGRESS
+state: COMPLETED
 estimated_hours: 4
 ---
 
