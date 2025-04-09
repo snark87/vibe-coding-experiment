@@ -345,9 +345,7 @@ func TestSomething(t *testing.T) {
     actual := FunctionUnderTest(input)
     
     // Assert: Verify the results
-    if actual != expected {
-        t.Errorf("Expected %q but got %q", expected, actual)
-    }
+    assert.Equal(t, expected, actual)
 }
 ```
 
@@ -369,9 +367,7 @@ func TestCalculation(t *testing.T) {
     for _, tc := range testCases {
         t.Run(tc.name, func(t *testing.T) {
             actual := Square(tc.input)
-            if actual != tc.expected {
-                t.Errorf("Expected %d but got %d", tc.expected, actual)
-            }
+            assert.Equal(t, tc.expected, actual)
         })
     }
 }
@@ -395,9 +391,7 @@ func TestCalculation(t *testing.T) {
 ```go
 func setupTestDatabase(tb testing.TB) (*sql.DB, func()) {
     db, err := sql.Open("postgres", testConnString)
-    if (err != nil) {
-        tb.Fatalf("Failed to connect to test DB: %v", err)
-    }
+    require.NoError(tb, err, "Failed to connect to test DB")
     
     // Run migrations, seed data, etc.
     
