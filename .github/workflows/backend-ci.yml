@@ -14,31 +14,30 @@ jobs:
     defaults:
       run:
         working-directory: ./quantum-circuit-editor/backend
-    
+
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Setup Go
       uses: actions/setup-go@v4
       with:
         go-version: '1.22'
         cache: true
         cache-dependency-path: './quantum-circuit-editor/backend/go.sum'
-    
+
     - name: Install golangci-lint
       run: |
         curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/main/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.0.2
         golangci-lint --version
-    
+
     - name: Go vet
       run: make vet
-    
+
     - name: Lint
       run: make lint
-    
+
     - name: Test
       run: make test
-    
+
     - name: Build
       run: make build
-    

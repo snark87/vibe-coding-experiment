@@ -1,4 +1,4 @@
-You are a senior software architect. Based on functional requirements and description of epic ARC-0001 write an initial draft of an overview high-level architecture document. 
+You are a senior software architect. Based on functional requirements and description of epic ARC-0001 write an initial draft of an overview high-level architecture document.
 
 - Put it into ./docs folder
 - Don't go too deep into specific: it's an initial draft and a very high-level overview

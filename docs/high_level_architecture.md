@@ -207,9 +207,9 @@ package "Frontend (TypeScript + React)" {
   [Gate Palette] as Palette
   [Control Panel] as Panel
   [Results Visualizer] as Results
-  
+
   database "Circuit State" as State
-  
+
   Canvas --> State
   Palette --> Canvas
   Panel --> State
@@ -242,7 +242,7 @@ interface CircuitState {
 }
 
 // Actions for state management
-type CircuitAction = 
+type CircuitAction =
   | { type: 'ADD_GATE', gate: Gate }
   | { type: 'REMOVE_GATE', gateId: string }
   | { type: 'MOVE_GATE', gateId: string, newPosition: Position }
@@ -271,7 +271,7 @@ package "Backend Services (Go)" {
   [Circuit Manager] as CircuitMgr
   [Simulation API Client] as SimClient
   [Database Access Layer] as DAL
-  
+
   Router --> Auth
   Router --> CircuitMgr
   Router --> SimClient
@@ -317,7 +317,7 @@ package "Quantum Simulation Module (Python)" {
   [Circuit Simulator] as Simulator
   [Visualization Helper] as Visualizer
   [QASM Generator] as QASMGen
-  
+
   API --> Validator
   API --> Simulator
   API --> Visualizer
@@ -435,19 +435,19 @@ cloud "Google Cloud Platform" {
   node "Cloud Run" as FrontendService {
     [Frontend Container]
   }
-  
+
   node "Cloud Run" as BackendService {
     [Backend Container]
   }
-  
+
   node "Cloud Run" as SimulationService {
     [Simulation Container]
   }
-  
+
   database "Cloud SQL" as DB {
     [PostgreSQL]
   }
-  
+
   FrontendService --> BackendService: API calls
   BackendService --> SimulationService: Simulation requests
   BackendService --> DB: Data persistence

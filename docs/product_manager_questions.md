@@ -2,7 +2,7 @@
 
 ## Target Audience & User Personas
 
-1. Who are the primary users of this quantum circuit editor? 
+1. Who are the primary users of this quantum circuit editor?
    - [ ]Academic researchers?
    - [x] Students learning quantum computing?
    - [ ] Industry professionals?

@@ -30,7 +30,7 @@ class QuantumCircuit:
     def __init__(self, num_qubits):
         self.num_qubits = num_qubits
         self._state = self._initialize_state()
-    
+
     def _initialize_state(self):
         # Private helper method
         return [0] * self.num_qubits
@@ -40,7 +40,7 @@ class qc:
     def __init__(self, n):
         self.n = n
         self.s = self.init_s()
-    
+
     def init_s(self):
         return [0] * self.n
 ```
@@ -56,17 +56,17 @@ class qc:
 ```python
 def simulate_circuit(circuit: QuantumCircuit, shots: int = 1000) -> dict:
     """Simulate a quantum circuit and return measurement results.
-    
+
     Args:
         circuit: The quantum circuit to simulate.
         shots: Number of simulation shots to run.
-    
+
     Returns:
         A dictionary mapping measurement outcomes to their counts.
-    
+
     Raises:
         SimulationError: If the simulation fails.
-        
+
     Example:
         >>> circuit = QuantumCircuit(2)
         >>> circuit.h(0)

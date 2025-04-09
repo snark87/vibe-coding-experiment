@@ -23,20 +23,20 @@ linters:
 issues:
   # Maximum issues count per one linter
   max-issues-per-linter: 0
-  
+
   # Maximum count of issues with the same text
   max-same-issues: 0
 
 run:
   # Timeout for analysis
   timeout: 5m
-  
+
   # Exit code when at least one issue was found
   issues-exit-code: 1
-  
+
   # Include test files in analysis
   tests: true
-  
+
   # Build tags to include in analysis
   build-tags:
     - integration

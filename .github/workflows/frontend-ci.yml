@@ -15,25 +15,25 @@ jobs:
     defaults:
       run:
         working-directory: ./quantum-circuit-editor/frontend
-    
+
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '18'
         cache: 'npm'
         cache-dependency-path: './quantum-circuit-editor/frontend/package-lock.json'
-    
+
     - name: Install dependencies
       run: npm ci
-    
+
     - name: Lint
       run: npm run lint
-    
+
     - name: Build
       run: npm run build
-    
+
     - name: Test
       run: npm test

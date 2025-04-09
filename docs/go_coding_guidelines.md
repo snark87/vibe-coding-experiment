@@ -35,7 +35,7 @@ This document outlines our coding standards and best practices for Go developmen
   type Server struct {
       // ...
   }
-  
+
   // Run starts the server on the specified port.
   func (s *Server) Run() error {
       // ...
@@ -69,7 +69,7 @@ This document outlines our coding standards and best practices for Go developmen
 - Configure slog with appropriate handlers early in the application lifecycle.
 - Include relevant context in logs:
   ```go
-  slog.Info("Processing request", 
+  slog.Info("Processing request",
       "method", req.Method,
       "path", req.URL.Path,
       "requestID", requestID)
@@ -340,10 +340,10 @@ func TestSomething(t *testing.T) {
     // Arrange: Set up the test case
     expected := "expected result"
     input := "test input"
-    
+
     // Act: Call the function under test
     actual := FunctionUnderTest(input)
-    
+
     // Assert: Verify the results
     assert.Equal(t, expected, actual)
 }
@@ -363,7 +363,7 @@ func TestCalculation(t *testing.T) {
         {"positive input", 5, 25},
         {"negative input", -5, 25},
     }
-    
+
     for _, tc := range testCases {
         t.Run(tc.name, func(t *testing.T) {
             actual := Square(tc.input)
@@ -392,9 +392,9 @@ func TestCalculation(t *testing.T) {
 func setupTestDatabase(tb testing.TB) (*sql.DB, func()) {
     db, err := sql.Open("postgres", testConnString)
     require.NoError(tb, err, "Failed to connect to test DB")
-    
+
     // Run migrations, seed data, etc.
-    
+
     return db, func() {
         // Cleanup function to run after test
         db.Close()
@@ -449,20 +449,20 @@ func TestGetUserHandler(t *testing.T) {
         },
         // Additional test cases...
     }
-    
+
     for _, tc := range tests {
         t.Run(tc.name, func(t *testing.T) {
             // Arrange
             mockService := &MockUserService{}
             tc.setupMock(mockService)
             handler := NewUserHandler(mockService)
-            
+
             req := httptest.NewRequest("GET", "/users/"+tc.userID, nil)
             rec := httptest.NewRecorder()
-            
+
             // Act
             handler.GetUser(rec, req, []httprouter.Param{{Key: "id", Value: tc.userID}})
-            
+
             // Assert
             if rec.Code != tc.expectedStatus {
                 t.Errorf("Expected status %d but got %d", tc.expectedStatus, rec.Code)
@@ -494,13 +494,13 @@ For testing code with goroutines or channels:
 func TestAsyncProcess(t *testing.T) {
     // Create a channel to signal completion
     done := make(chan struct{})
-    
+
     // Start the async process
     go func() {
         AsyncFunction()
         close(done)
     }()
-    
+
     // Wait with timeout
     select {
     case <-done:
@@ -533,10 +533,10 @@ Example:
 func TestUser(t *testing.T) {
     // Arrange
     user := NewUser("john", "john@example.com")
-    
+
     // Act
     err := user.Validate()
-    
+
     // Assert
     require.NoError(t, err, "User validation should succeed")
     assert.Equal(t, "john", user.Username)
@@ -576,10 +576,10 @@ func TestSomething(t *testing.T) {
     // Arrange: Set up the test case
     expected := "expected result"
     input := "test input"
-    
+
     // Act: Call the function under test
     actual := FunctionUnderTest(input)
-    
+
     // Assert: Verify the results
     assert.Equal(t, expected, actual)
 }
@@ -600,12 +600,12 @@ func TestSquare(t *testing.T) {
         {"positive input", 5, 25},
         {"negative input", -5, 25},
     }
-    
+
     for _, tc := range testCases {
         t.Run(tc.name, func(t *testing.T) {
             // Act
             actual := Square(tc.input)
-            
+
             // Assert
             assert.Equal(t, tc.expected, actual)
         })
@@ -622,10 +622,10 @@ func TestUserService_GetUser_Success(t *testing.T) {
     mockRepo := mocks.NewUserRepository(t)
     mockRepo.On("FindByID", "123").Return(&User{ID: "123", Name: "Test User"}, nil)
     svc := NewUserService(mockRepo)
-    
+
     // Act
     user, err := svc.GetUser("123")
-    
+
     // Assert
     require.NoError(t, err)
     assert.Equal(t, "123", user.ID)
@@ -637,10 +637,10 @@ func TestUserService_GetUser_NotFound(t *testing.T) {
     mockRepo := mocks.NewUserRepository(t)
     mockRepo.On("FindByID", "999").Return(nil, ErrNotFound)
     svc := NewUserService(mockRepo)
-    
+
     // Act
     user, err := svc.GetUser("999")
-    
+
     // Assert
     assert.Nil(t, user)
     assert.ErrorIs(t, err, ErrNotFound)

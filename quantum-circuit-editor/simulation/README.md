@@ -36,11 +36,41 @@ pip install -r requirements.txt
 pip install -e .  # Install the package in development mode
 ```
 
-3. Set up pre-commit hooks:
+### Pre-commit Setup
+
+We use pre-commit hooks to ensure code quality before commits. You can set up pre-commit in two ways:
+
+#### Option 1: Using the setup script (recommended)
+
+Run the provided setup script to automatically install and configure pre-commit:
 
 ```bash
+./setup_precommit.sh
+```
+
+This script will:
+- Create a virtual environment if one doesn't exist
+- Install all required dependencies
+- Set up pre-commit hooks
+- Run an initial check on all files
+
+#### Option 2: Manual setup
+
+If you prefer manual setup, follow these steps:
+
+1. Install pre-commit:
+```bash
 pip install pre-commit
+```
+
+2. Install the git hook scripts:
+```bash
 pre-commit install
+```
+
+3. (Optional) Run against all files:
+```bash
+pre-commit run --all-files
 ```
 
 ### Code Quality Tools
@@ -89,6 +119,14 @@ Pre-commit hooks will run these checks automatically before each commit:
 ```bash
 pre-commit run --all-files
 ```
+
+#### Skipping Hooks
+
+In rare cases where you need to bypass pre-commit hooks:
+```bash
+git commit -m "Your message" --no-verify
+```
+**Note:** This should only be used in exceptional circumstances.
 
 ### Running Tests
 
