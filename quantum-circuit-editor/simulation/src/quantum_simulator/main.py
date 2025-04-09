@@ -3,6 +3,7 @@
 Minimal placeholder implementation for ARC-0006.
 """
 import logging
+from typing import Optional
 
 from .config import SimulationConfig
 
@@ -13,7 +14,7 @@ logger = logging.getLogger(__name__)
 class Simulation:
     """Minimal simulation class placeholder."""
 
-    def __init__(self, config: SimulationConfig = None):
+    def __init__(self, config: Optional[SimulationConfig] = None):
         """Initialize the simulation with the provided configuration.
 
         Args:
