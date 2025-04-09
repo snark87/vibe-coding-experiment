@@ -11,26 +11,37 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
-      - VITE_API_URL=http://backend:8080
+      - VITE_API_URL=http://backend:8888
     depends_on:
       - backend
 
-  # Backend service placeholder
+  # Backend service
   backend:
-    image: golang:1.19-alpine
-    working_dir: /app
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
     volumes:
       - ./backend:/app
     ports:
-      - "9999:9999"
-    command: sh -c "echo 'Backend placeholder service running on port 9999'"
+      - "8888:8888"
+    environment:
+      - PORT=8888
+      - SIMULATION_API_URL=http://simulation:5555
+      - ENV=development
+    command: go run main.go
+    depends_on:
+      - simulation
 
-  # Simulation service placeholder
+  # Simulation service
   simulation:
-    image: python:3.10-slim
-    working_dir: /app
+    build:
+      context: ./simulation
+      dockerfile: Dockerfile.dev
     volumes:
       - ./simulation:/app
     ports:
       - "5555:5555"
-    command: sh -c "echo 'Simulation placeholder service running on port 5555'"
+    environment:
+      - PORT=5555
+      - PYTHONPATH=/app
+    command: python -m src.quantum_simulator.main

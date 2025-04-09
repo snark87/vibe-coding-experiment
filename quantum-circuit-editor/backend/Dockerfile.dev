@@ -1,0 +1,21 @@
+FROM golang:1.24-alpine
+
+WORKDIR /app
+
+# Install development tools
+RUN apk add --no-cache git &&\
+    go install github.com/air-verse/air@v1.61.7
+
+# Go modules will be downloaded on demand
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy source code
+COPY . .
+
+# Air for hot-reload during development
+EXPOSE 8080
+
+# Default command uses direct Go run for simplicity
+# You can override in docker-compose to use 'air' for hot-reload
+CMD ["go", "run", "main.go"]
