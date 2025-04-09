@@ -2,8 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
@@ -13,28 +12,26 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 	"github.com/snark87/quantum-circuit-editor/backend/api"
+	"github.com/snark87/quantum-circuit-editor/backend/internal/middleware"
 )
 
-func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-
+// configureServer creates and configures an HTTP server and router
+func configureServer(port string) (*http.Server, *mux.Router) {
 	r := mux.NewRouter()
+
+	// Apply logging middleware to all requests
+	r.Use(middleware.Logger)
 
 	// Setup API routes
 	api.RegisterRoutes(r)
 
-	// Setup CORS
 	corsMiddleware := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"}, // Update this in production
+		AllowedOrigins:   []string{"*"}, // SECURITY: Update this with specific origins in production
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Content-Type", "Authorization"},
 		AllowCredentials: true,
 	})
 
-	// Create server
 	srv := &http.Server{
 		Addr:         ":" + port,
 		WriteTimeout: time.Second * 15,
@@ -43,25 +40,55 @@ func main() {
 		Handler:      corsMiddleware.Handler(r),
 	}
 
-	// Start server in a goroutine
+	return srv, r
+}
+
+// startServer starts the server and returns a shutdown function
+func startServer(srv *http.Server) func() {
 	go func() {
-		fmt.Printf("Server starting on port %s...\n", port)
+		slog.Info("Server starting", "port", srv.Addr)
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("Server failed to start: %v", err)
+			slog.Error("Server failed to start", "error", err)
+			os.Exit(1)
 		}
 	}()
 
-	// Wait for interrupt signal to gracefully shutdown the server
+	return func() {
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
+		defer cancel()
+
+		slog.Info("Shutting down server...")
+		if err := srv.Shutdown(ctx); err != nil {
+			slog.Error("Server shutdown failed", "error", err)
+		} else {
+			slog.Info("Server gracefully stopped")
+		}
+	}
+}
+
+func main() {
+	// Configure structured logging
+	logHandler := slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+		Level: slog.LevelInfo,
+	})
+	slog.SetDefault(slog.New(logHandler))
+
+	// Get port from environment
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+		slog.Info("No PORT environment variable found, using default", "port", port)
+	}
+
+	// Setup and start server
+	srv, _ := configureServer(port)
+	shutdownFn := startServer(srv)
+
+	// Wait for interrupt signal
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	<-c
 
-	// Create a deadline to wait for
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
-	defer cancel()
-
-	// Doesn't block if no connections, but will otherwise wait until the timeout
-	srv.Shutdown(ctx)
-
-	fmt.Println("Server gracefully stopped")
+	// Graceful shutdown
+	shutdownFn()
 }

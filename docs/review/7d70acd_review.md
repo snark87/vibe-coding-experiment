@@ -7,10 +7,15 @@ This document summarizes the code review of the Go backend for the Quantum Circu
 ## Key Findings
 
 1. **Error Handling**: Several instances where errors are not properly handled or where panic is used instead of returning errors.
+Comment: This has to be addressed
 2. **Security Concerns**: CORS configuration is overly permissive for a production environment.
+Comment: This will be addressed later after discussion with architect.
 3. **Logging**: Inconsistent use of logging patterns; missing structured logging with context.
+Comment: This has to be addressed
 4. **Documentation**: Some functions lack proper documentation following Go standards.
+// Comment: This has to be addressed
 5. **Placeholder Implementation**: Multiple endpoints are implemented as placeholders with a common handler.
+Comment: WON'T FIX
 
 ## Detailed Review Items
 

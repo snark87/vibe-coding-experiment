@@ -2,12 +2,13 @@ package api
 
 import (
 	"encoding/json"
+	"log/slog"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
-// RegisterRoutes sets up all API routes
+// RegisterRoutes sets up all API routes for the application
 func RegisterRoutes(r *mux.Router) {
 	// Health check endpoint
 	r.HandleFunc("/health", healthCheckHandler).Methods("GET")
@@ -36,16 +37,28 @@ func RegisterRoutes(r *mux.Router) {
 	export.HandleFunc("/qasm", notImplementedHandler).Methods("POST")
 }
 
-// healthCheckHandler responds with a simple health status
+// healthCheckHandler returns a simple status response to confirm API availability
 func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+	respondWithJSON(w, http.StatusOK, map[string]string{"status": "ok"})
 }
 
-// notImplementedHandler is a placeholder for endpoints not yet implemented
+// notImplementedHandler responds with 501 status for endpoints not yet implemented
 func notImplementedHandler(w http.ResponseWriter, r *http.Request) {
+	respondWithJSON(w, http.StatusNotImplemented, map[string]string{
+		"error":   "Not implemented yet",
+		"message": "This endpoint is planned but not yet available",
+	})
+}
+
+// respondWithJSON sends a JSON response with the specified status code
+func respondWithJSON(w http.ResponseWriter, statusCode int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusNotImplemented)
-	json.NewEncoder(w).Encode(map[string]string{"error": "Not implemented yet"})
+	w.WriteHeader(statusCode)
+
+	if err := json.NewEncoder(w).Encode(data); err != nil {
+		slog.Error("Failed to encode JSON response",
+			"error", err,
+			"statusCode", statusCode,
+		)
+	}
 }
