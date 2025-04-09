@@ -2,8 +2,10 @@
 Basic tests for simulation component.
 """
 import pytest
-from quantum_simulator.main import Simulation
+
 from quantum_simulator.config import SimulationConfig
+from quantum_simulator.main import Simulation
+
 
 def test_simulation_init():
     """Test that simulation can be initialized."""
@@ -11,11 +13,13 @@ def test_simulation_init():
     assert isinstance(sim, Simulation)
     assert sim.config is not None
 
+
 def test_simulation_run():
     """Test that simulation can be run."""
     sim = Simulation()
     result = sim.run()
     assert result["status"] == "success"
+
 
 def test_custom_config():
     """Test simulation with custom config."""

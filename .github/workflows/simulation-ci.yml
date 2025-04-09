@@ -1,0 +1,57 @@
+name: Simulation CI
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'quantum-circuit-editor/simulation/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'quantum-circuit-editor/simulation/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: quantum-circuit-editor/simulation
+        
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -e .
+        
+    - name: Lint with flake8
+      run: flake8 src tests
+      
+    - name: Format check with black
+      run: black --check src tests
+      
+    - name: Import check with isort
+      run: isort --check-only --profile black src tests
+      
+    - name: Type check with mypy
+      run: mypy src tests
+      
+    - name: Security check with bandit
+      run: bandit -r src
+      
+    - name: Run tests
+      run: pytest --cov=src tests/
+      
+    - name: Upload coverage report
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./quantum-circuit-editor/simulation/coverage.xml
+        fail_ci_if_error: false

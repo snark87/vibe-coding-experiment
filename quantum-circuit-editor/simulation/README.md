@@ -36,12 +36,72 @@ pip install -r requirements.txt
 pip install -e .  # Install the package in development mode
 ```
 
+3. Set up pre-commit hooks:
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+### Code Quality Tools
+
+This project uses several code quality tools to maintain a high standard of code:
+
+#### Formatting and Linting
+
+- **Black** - Code formatter
+  ```bash
+  black src/ tests/
+  ```
+
+- **isort** - Import sorter
+  ```bash
+  isort src/ tests/
+  ```
+
+- **flake8** - Linter
+  ```bash
+  flake8 src/ tests/
+  ```
+
+- **pylint** - Static code analyzer
+  ```bash
+  pylint src/ tests/
+  ```
+
+#### Type Checking
+
+- **mypy** - Static type checker
+  ```bash
+  mypy src/ tests/
+  ```
+
+#### Security
+
+- **bandit** - Security linter
+  ```bash
+  bandit -r src/
+  ```
+
+#### Automatic Checks
+
+Pre-commit hooks will run these checks automatically before each commit:
+```bash
+pre-commit run --all-files
+```
+
 ### Running Tests
 
 Run tests using pytest:
 
 ```bash
 pytest tests/
+```
+
+With coverage:
+
+```bash
+pytest --cov=src tests/
 ```
 
 ## Usage

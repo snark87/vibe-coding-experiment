@@ -7,3 +7,39 @@ name = "vibe-simulation"
 version = "0.1.0"
 description = "Simulation component for ARC-0006"
 requires-python = ">=3.9"
+
+# Code formatting
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
+
+# Import sorting
+[tool.isort]
+profile = "black"
+line_length = 88
+
+# Type checking
+[tool.mypy]
+python_version = "3.9"
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unused_ignores = true
+
+# Testing
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_functions = "test_*"
+
+# Linting
+[tool.pylint.messages_control]
+disable = "C0111,C0103,C0330,C0326"
+
+[tool.pylint.format]
+max-line-length = "88"
