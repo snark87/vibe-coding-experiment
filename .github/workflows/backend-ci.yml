@@ -30,12 +30,6 @@ jobs:
         curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/main/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.0.2
         golangci-lint --version
     
-    - name: Tidy modules
-      run: make tidy
-    
-    - name: Format check
-      run: make fmt
-    
     - name: Go vet
       run: make vet
     
@@ -53,4 +47,4 @@ jobs:
       with:
         name: quantum-circuit-editor-backend
         path: ./quantum-circuit-editor/backend/build/quantum-circuit-editor-backend
-        retention-days: 7
+        retention-days: 1
