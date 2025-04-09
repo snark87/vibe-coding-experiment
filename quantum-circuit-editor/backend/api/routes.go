@@ -1,3 +1,5 @@
+// Package api implements the REST API endpoints for the Quantum Circuit Editor
+// service, including route definitions and handler functions.
 package api
 
 import (
@@ -38,12 +40,12 @@ func RegisterRoutes(r *mux.Router) {
 }
 
 // healthCheckHandler returns a simple status response to confirm API availability
-func healthCheckHandler(w http.ResponseWriter, r *http.Request) {
+func healthCheckHandler(w http.ResponseWriter, _ *http.Request) {
 	respondWithJSON(w, http.StatusOK, map[string]string{"status": "ok"})
 }
 
 // notImplementedHandler responds with 501 status for endpoints not yet implemented
-func notImplementedHandler(w http.ResponseWriter, r *http.Request) {
+func notImplementedHandler(w http.ResponseWriter, _ *http.Request) {
 	respondWithJSON(w, http.StatusNotImplemented, map[string]string{
 		"error":   "Not implemented yet",
 		"message": "This endpoint is planned but not yet available",

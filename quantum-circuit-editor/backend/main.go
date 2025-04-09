@@ -1,3 +1,6 @@
+// Package main is the entry point for the Quantum Circuit Editor backend service.
+// It sets up the HTTP server, configures middleware, and manages the lifecycle
+// of the application.
 package main
 
 import (

@@ -1,0 +1,42 @@
+# Configuration for golangci-lint
+# See: https://golangci-lint.run/usage/configuration/
+version: "2"
+
+linters:
+  # Enable specific linters
+  enable:
+    - errcheck      # Check for unchecked errors
+    - govet         # Report suspicious constructs
+    - ineffassign   # Detect unused assignments
+    - staticcheck   # Static analysis checks
+    - unused        # Check for unused constants, variables, functions
+    - nilerr        # Finds code that returns nil even if it checks that error is not nil
+    - revive        # Drop-in replacement for golint
+    - gocyclo       # Cyclomatic complexity
+    - gosec         # Security checks
+    - misspell      # Spelling mistakes
+    - whitespace    # Checks for unnecessary whitespace
+    - unparam       # Reports unused function parameters
+    - prealloc      # Finds slice declarations that could be pre-allocated
+    - bodyclose     # Checks whether HTTP response bodies are closed
+
+issues:
+  # Maximum issues count per one linter
+  max-issues-per-linter: 0
+  
+  # Maximum count of issues with the same text
+  max-same-issues: 0
+
+run:
+  # Timeout for analysis
+  timeout: 5m
+  
+  # Exit code when at least one issue was found
+  issues-exit-code: 1
+  
+  # Include test files in analysis
+  tests: true
+  
+  # Build tags to include in analysis
+  build-tags:
+    - integration

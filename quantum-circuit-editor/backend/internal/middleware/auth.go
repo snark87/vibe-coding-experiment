@@ -1,3 +1,5 @@
+// Package middleware provides HTTP middleware functions for the Quantum Circuit Editor backend,
+// including authentication, logging, and other request processing functionality.
 package middleware
 
 import (
@@ -21,9 +23,12 @@ type contextKey string
 const UserKey contextKey = "user"
 
 var (
-	ErrNoAuthHeader      = errors.New("no authorization header provided")
+	// ErrNoAuthHeader is returned when no Authorization header is present in the request
+	ErrNoAuthHeader = errors.New("no authorization header provided")
+	// ErrInvalidAuthFormat is returned when the Authorization header format is incorrect
 	ErrInvalidAuthFormat = errors.New("invalid authorization header format")
-	ErrInvalidToken      = errors.New("invalid authentication token")
+	// ErrInvalidToken is returned when the provided authentication token is invalid
+	ErrInvalidToken = errors.New("invalid authentication token")
 )
 
 // Authenticate validates JWT tokens from the Authorization header
@@ -92,5 +97,9 @@ func handleAuthError(w http.ResponseWriter, r *http.Request, err error, statusCo
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
-	w.Write([]byte(`{"error": "Authentication required"}`))
+	// Fix: Check error when writing the response
+	_, writeErr := w.Write([]byte(`{"error": "Authentication required"}`))
+	if writeErr != nil {
+		slog.Error("Failed to write error response", "error", writeErr)
+	}
 }
