@@ -42,6 +42,7 @@ repos:
     rev: 1.7.5
     hooks:
     -   id: bandit
+        additional_dependencies: [".[toml]"]
         args: ["-c", "quantum-circuit-editor/simulation/pyproject.toml"]
         exclude: ^quantum-circuit-editor/simulation/tests/
         files: ^quantum-circuit-editor/simulation/
