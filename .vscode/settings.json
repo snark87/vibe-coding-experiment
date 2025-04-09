@@ -5,11 +5,7 @@
         "titleBar.activeForeground": "#FDF8FC"
     },
     "chat.agent.enabled": true,
-    "github.copilot.excludePatterns": [
-        "**/prompts/**"
-    ],
 
-    // PlantUML configuration
     "plantuml.server": "https://www.plantuml.com/plantuml",
     "plantuml.render": "PlantUMLServer",
     "plantuml.exportFormat": "png"

@@ -12,6 +12,7 @@ This document outlines our coding standards and best practices for Python develo
 - Use [isort](https://pycqa.github.io/isort/) for organizing imports.
 - Configure your IDE to format code on save.
 - Use 4 spaces for indentation (no tabs).
+- **Note on line length**: We use Black's default line length of 88 characters. Make sure flake8 configuration matches this value to avoid conflicts between formatting tools (see Configuration section).
 
 ### Naming Conventions
 
@@ -235,10 +236,19 @@ warn_unused_ignores = true
 ```ini
 # setup.cfg
 [flake8]
-max-line-length = 88
-extend-ignore = E203, W503
+max-line-length = 88  # Must match Black's line length
+extend-ignore = E203, W503  # Black-compatible settings
 exclude = .git,__pycache__,build,dist
 ```
+
+### Resolving Tool Conflicts
+
+To resolve common conflicts between code quality tools:
+
+1. **Black and flake8 line length**: Always set flake8's `max-line-length` to 88 to match Black.
+2. **isort and Black**: Use `profile = "black"` in isort configuration.
+3. **flake8 and Black**: Include `extend-ignore = E203, W503` in flake8 configuration.
+4. **Running tools in the correct order**: Run isort → Black → flake8 to ensure consistency.
 
 ### IDE Integration
 

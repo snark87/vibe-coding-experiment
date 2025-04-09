@@ -12,7 +12,4 @@ class SimulationConfig:
 
     def __str__(self):
         """Return string representation of the configuration."""
-        return (
-            f"SimulationConfig(name={self.name}, "
-            f"iterations={self.iterations})"
-        )
+        return f"SimulationConfig(name={self.name}, " f"iterations={self.iterations})"
