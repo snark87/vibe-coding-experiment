@@ -1,8 +1,6 @@
 """
 Basic tests for simulation component.
 """
-import pytest
-
 from quantum_simulator.config import SimulationConfig
 from quantum_simulator.main import Simulation
 
