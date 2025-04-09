@@ -4,20 +4,20 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'frontend/**'
-      - 'shared/**'
+      - 'quantum-circuit-editor/frontend/**'
+      - 'quantum-circuit-editor/shared/**'
   pull_request:
     branches: [ main ]
     paths:
-      - 'frontend/**'
-      - 'shared/**'
+      - 'quantum-circuit-editor/frontend/**'
+      - 'quantum-circuit-editor/shared/**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./frontend
+        working-directory: ./quantum-circuit-editor/frontend
     
     steps:
     - uses: actions/checkout@v3
@@ -27,7 +27,7 @@ jobs:
       with:
         node-version: '18'
         cache: 'npm'
-        cache-dependency-path: './frontend/package-lock.json'
+        cache-dependency-path: './quantum-circuit-editor/frontend/package-lock.json'
     
     - name: Install dependencies
       run: npm ci
