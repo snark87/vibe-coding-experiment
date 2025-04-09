@@ -3,9 +3,6 @@ name: Frontend CI
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'quantum-circuit-editor/frontend/**'
-      - 'quantum-circuit-editor/shared/**'
   pull_request:
     branches: [ main ]
     paths:
