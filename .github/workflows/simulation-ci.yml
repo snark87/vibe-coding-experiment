@@ -3,8 +3,6 @@ name: Simulation CI
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'quantum-circuit-editor/simulation/**'
   pull_request:
     branches: [ main ]
     paths:
@@ -20,6 +18,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Fetch all history for pre-commit file history checks
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -31,21 +31,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install -e .
+        pip install pre-commit
 
-    - name: Lint with flake8
-      run: flake8 src tests
-
-    - name: Format check with black
-      run: black --check src tests
-
-    - name: Import check with isort
-      run: isort --check-only --profile black src tests
-
-    - name: Type check with mypy
-      run: mypy src tests
-
-    - name: Security check with bandit
-      run: bandit -r src
+    - name: Run pre-commit
+      run: pre-commit run --all-files --show-diff-on-failure
 
     - name: Run tests
       run: pytest --cov=src tests/

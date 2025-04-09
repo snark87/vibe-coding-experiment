@@ -206,6 +206,57 @@ def test_gate_matrix(gate, expected):
 - **bandit**: Security checks
 - **pylint**: Advanced static analysis
 
+### Pre-commit Integration
+
+Our project uses pre-commit to automate code quality checks before commits. This ensures that all code meets our standards before being committed.
+
+#### Installation and Setup
+
+```bash
+# Install pre-commit
+pip install pre-commit
+
+# Install the git hooks
+pre-commit install
+```
+
+#### Usage Options
+
+- **Standard usage (with auto-fixing)**:
+  ```bash
+  # Run on all files
+  pre-commit run --all-files
+
+  # Run on staged files only (default behavior during git commit)
+  pre-commit run
+  ```
+
+- **Check-only mode (no auto-fixing)**:
+  ```bash
+  # Run on all files without modifying them
+  pre-commit run --all-files --no-autofixing
+
+  # For showing what would be changed
+  pre-commit run --all-files --show-diff-on-failure
+  ```
+
+- **Running specific hooks**:
+  ```bash
+  pre-commit run black --all-files
+  pre-commit run flake8 --all-files
+  ```
+
+#### CI Integration
+
+Our CI pipeline uses pre-commit in check-only mode to ensure code meets all quality standards:
+
+```yaml
+- name: Run pre-commit
+  run: pre-commit run --all-files --show-diff-on-failure
+```
+
+This approach ensures consistency between local development and CI environments, as both use the same configuration.
+
 ### Configuration
 
 Our project uses these configurations:

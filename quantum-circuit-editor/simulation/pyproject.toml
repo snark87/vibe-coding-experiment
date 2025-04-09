@@ -43,3 +43,9 @@ disable = "C0111,C0103"
 
 [tool.pylint.format]
 max-line-length = "88"
+
+# Security scanning
+[tool.bandit]
+exclude_dirs = ["tests", "venv", ".git", "__pycache__", "build", "dist"]
+targets = ["src"]
+skips = ["B101"]  # Skip assert statements warning
