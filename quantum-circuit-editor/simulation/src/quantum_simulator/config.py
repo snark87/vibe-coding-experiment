@@ -1,6 +1,4 @@
-"""
-Configuration settings for simulation component.
-"""
+"""Configuration settings for simulation component."""
 from dataclasses import dataclass
 
 
@@ -13,4 +11,5 @@ class SimulationConfig:
     debug_mode: bool = False
 
     def __str__(self):
+        """Return string representation of the configuration."""
         return f"SimulationConfig(name={self.name}, iterations={self.iterations})"

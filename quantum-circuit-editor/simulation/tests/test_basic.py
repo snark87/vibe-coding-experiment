@@ -1,6 +1,4 @@
-"""
-Basic tests for simulation component.
-"""
+"""Basic tests for simulation component."""
 from quantum_simulator.config import SimulationConfig
 from quantum_simulator.main import Simulation
 

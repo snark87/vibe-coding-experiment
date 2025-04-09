@@ -1,5 +1,5 @@
-"""
-Main entry point for the simulation component.
+"""Main entry point for the simulation component.
+
 Minimal placeholder implementation for ARC-0006.
 """
 import logging
@@ -14,6 +14,12 @@ class Simulation:
     """Minimal simulation class placeholder."""
 
     def __init__(self, config: SimulationConfig = None):
+        """Initialize the simulation with the provided configuration.
+
+        Args:
+            config: Configuration settings for the simulation.
+                   If not provided, default configuration is used.
+        """
         self.config = config or SimulationConfig()
         logger.info("Simulation initialized with config: %s", self.config)
 

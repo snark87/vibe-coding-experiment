@@ -1,5 +1,5 @@
-"""
-Configure pytest for the quantum_simulator package tests.
+"""Configure pytest for the quantum_simulator package tests.
+
 This file helps resolve import issues by ensuring the proper path is in sys.path.
 """
 import sys

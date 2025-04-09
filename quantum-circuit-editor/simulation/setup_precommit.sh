@@ -9,7 +9,7 @@ if [[ -z "${VIRTUAL_ENV}" ]]; then
   echo "No virtual environment detected."
   echo "Creating a new virtual environment..."
   python -m venv venv
-  
+
   # Activate virtual environment
   if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
     source venv/Scripts/activate
