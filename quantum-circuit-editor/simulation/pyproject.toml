@@ -1,0 +1,9 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vibe-simulation"
+version = "0.1.0"
+description = "Simulation component for ARC-0006"
+requires-python = ">=3.9"
