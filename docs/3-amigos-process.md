@@ -22,7 +22,7 @@ A 3 Amigos meeting typically involves:
    - Develops testing scenarios
    - Identifies edge cases
    - Ensures quality and requirement testability
-   
+
 4. **Domain Expert (Optional but Recommended)**
    - Provides specific domain knowledge (e.g., Quantum Science)
    - Validates technical accuracy of domain-specific features
@@ -45,7 +45,7 @@ A 3 Amigos meeting typically involves:
    - Product Owner shares initial user stories/requirements
    - All participants review materials independently
    - Questions and clarifications captured in a shared document
-   
+
 2. **Agenda Setting (T-1 day)**
    - Prioritized list of discussion items
    - Time allocation for each topic
