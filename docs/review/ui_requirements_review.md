@@ -22,11 +22,17 @@ This document provides a critical review of the UI requirements for the Quantum 
 
 1. **Alignment with Functional Requirements**: Ensure all UI requirements explicitly map back to the functional requirements to prevent scope creep.
 
+Comment: has to be addressed
+
 2. **Design System Specification**: Add references to a design system or component library that will be used to ensure consistency.
+
+Comment: first, design system has to be created
 
 3. **Accessibility Guidelines**: Expand the brief mention of accessibility to include specific WCAG standards that should be met.
 
 4. **Internationalization**: Add considerations for potential future localization/internationalization.
+
+Comment: out of scope of MVP
 
 5. **User Testing Plan**: Include recommended approaches for validating UI decisions with target users.
 
@@ -34,12 +40,16 @@ This document provides a critical review of the UI requirements for the Quantum 
 
 7. **Dependencies Between Screens**: Clarify the exact data dependencies between different screens and components.
 
+Comment: has to be addressed
+
 ## Critical UI Concerns
 
 1. **Complexity vs. Simplicity Balance**
    - The UI requirements suggest numerous features (tutorials, tooltips, multiple screens)
    - This complexity might overwhelm beginners despite the educational focus
    - Consider a more gradual feature reveal approach or further simplification for MVP
+
+Comment: Addressed
 
 2. **Technical Feasibility of Circuit Canvas**
    - The interactive drag-and-drop canvas with real-time feedback is technically complex
@@ -51,10 +61,14 @@ This document provides a critical review of the UI requirements for the Quantum 
    - Drag-and-drop on touch devices presents unique UX challenges not fully addressed
    - The collapse patterns for smaller screens need more specific descriptions
 
+Comment: out of scope of MVP
+
 4. **Authentication Flow Details**
    - Google authentication is mentioned but the UX for auth failures or offline usage is not addressed
    - Guest mode is mentioned but its limitations compared to authenticated usage aren't specified
    - No clear guidance on handling authentication expiration during an active session
+
+Comment: has to be addressed
 
 5. **Performance Metric Specificity**
    - "Smooth" and "immediate" feedback are subjective terms
@@ -104,6 +118,6 @@ Based on this review, we recommend the following prioritized actions:
 
 ## Conclusion
 
-The UI requirements document provides a thorough foundation for the Quantum Circuit Editor MVP interface. However, it would benefit from additional technical specificity in critical areas, particularly regarding the implementation of the circuit canvas, performance metrics, error handling, and responsive design considerations. 
+The UI requirements document provides a thorough foundation for the Quantum Circuit Editor MVP interface. However, it would benefit from additional technical specificity in critical areas, particularly regarding the implementation of the circuit canvas, performance metrics, error handling, and responsive design considerations.
 
 By addressing these concerns, the team can ensure a more successful implementation that truly meets the needs of the educational target audience while remaining technically feasible within the MVP scope.

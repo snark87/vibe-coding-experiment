@@ -214,6 +214,77 @@ Select -> Export : Export to QASM
 5. Understanding results
 6. Saving and exporting
 
+### 4.5 Authentication Flow
+
+**Purpose**: Securely authenticate users while providing a smooth user experience with fallback options
+
+**Authentication Methods**:
+1. **Google Authentication** - Primary authentication method
+2. **Guest Mode** - Limited functionality access without authentication
+
+**Authentication Flow Requirements**:
+
+1. **Initial Authentication**
+   - Clear visual distinction between Google login and Guest mode options
+   - Explanatory text indicating the benefits of authenticated usage vs. guest mode
+   - Privacy policy and data usage information accessible before authentication
+   - Remember me option for returning users
+
+2. **Authentication Success**
+   - Clear visual feedback upon successful authentication
+   - Smooth transition to Circuit Editor Workspace
+   - User account information displayed in header (username, profile picture if available)
+   - First-time user detection to trigger optional tutorial
+
+3. **Authentication Failure Handling**
+   - Specific, user-friendly error messages for different failure scenarios:
+     - Network connectivity issues
+     - Invalid credentials
+     - Service unavailability
+     - Account-related issues
+   - Retry options with clear guidance
+   - Fallback to guest mode option with explanation of limitations
+
+4. **Guest Mode Limitations**
+   - Clear indication of guest mode status in the UI
+   - Visual cues next to features that require authentication
+   - Prompt to authenticate when attempting to use restricted features
+   - Session persistence limitations clearly explained
+   - Option to authenticate and convert current work to saved account at any time
+
+5. **Session Management**
+   - Session timeout warning 5 minutes before expiration
+   - Option to extend session without losing work
+   - Auto-save of current circuit state before authentication-related transitions
+   - Graceful handling of authentication loss during active usage
+   - Recovery of work in progress if authentication is re-established
+
+6. **Offline Usage** (Post MVP)
+   - Clear indication of offline status in the UI
+   - Automatic transition to offline mode when connectivity is lost
+   - Local storage of work in progress when offline
+   - Synchronization process when connectivity is restored
+   - Conflict resolution UI if local and server states differ after reconnection
+
+7. **Authentication State Transitions**
+   - Prevent work loss during authentication state changes
+   - Confirmation dialogs before actions that might affect unsaved work
+   - Visual indicators during authentication-related background processes
+   - Ability to cancel authentication processes that take too long
+
+**User Experience Considerations**:
+- Authentication should not be a barrier to starting exploration for new users
+- All authentication-related error messages should be friendly and jargon-free
+- Authentication state should be clearly visible at all times
+- Transitions between authenticated and unauthenticated states should preserve user work
+
+**Security Considerations**:
+- No storage of authentication credentials on client side
+- Secure token management with appropriate expiration
+- Clear indication of secure connection status
+- Option to explicitly log out from all screens
+- Automatic session termination after extended inactivity
+
 ## 5. Use Case Implementations
 
 ### 5.1 Use Case: Creating a Basic Bell State Circuit
@@ -236,7 +307,7 @@ User -> Palette : Select H gate
 User -> Canvas : Place H on first qubit
 User -> Palette : Select CNOT gate
 User -> Canvas : Connect qubits with CNOT
-User -> Editor : Click "Run Simulation" 
+User -> Editor : Click "Run Simulation"
 Editor -> Results : Show 50/50 distribution
 User -> Save : Click "Save"
 Save -> User : Enter "Bell State"
@@ -376,3 +447,139 @@ The design should prioritize:
 5. Straightforward saving and exporting capabilities
 
 This approach aligns with the MVP goals of creating an accessible educational tool for quantum computing concepts while keeping the interface simple and focused.
+
+## 11. MVP Simplification Strategy
+
+To address the balance between educational complexity and user-friendly simplicity, the following MVP simplification strategies will be implemented:
+
+### 11.1 Phased Feature Rollout
+
+**Core MVP Features** (Phase 1):
+- Circuit Editor Workspace with basic functionality only
+- Limited gate set (H, X, Z, CNOT only) to reduce initial complexity
+- Basic simulation capabilities with simplified results visualization
+- Essential save/load functionality without complex management features
+- Minimal inline help (tooltips only) instead of full tutorial system
+
+**Post-MVP Features** (Phase 2+):
+- Advanced gates and extended palette options
+- Comprehensive tutorial system and Help Screen
+- Enhanced circuit management in My Circuits Screen
+- Advanced export options and sharing features
+- Complex result visualizations and analytical tools
+
+### 11.2 UI Simplifications for MVP
+
+1. **Reduce Screen Count**:
+   - Consolidate Landing Screen and Circuit Editor into a single entry point
+   - Make My Circuits a panel within the main editor rather than a separate screen
+   - Defer comprehensive Help/Tutorial Screen to post-MVP, use inline guidance instead
+
+2. **Streamline Circuit Editor Components**:
+   - Limit the initial qubit count to 3 maximum for MVP (expandable in later versions)
+   - Simplify the gate palette to show only the most essential gates
+   - Use progressive disclosure techniques: hide advanced features until basic ones are mastered
+
+3. **Tutorial Approach**:
+   - Replace full tutorial screen with targeted, context-sensitive help
+   - Implement an optional "guided tour" that highlights one feature at a time
+   - Use subtle hints and suggestions rather than lengthy explanations
+
+4. **Simplified User Flows**:
+   - Focus on the core user flow: create circuit → run simulation → view results
+   - Defer complex management features (bulk operations, tagging, advanced sorting)
+   - Limit export options to a single, simple format for MVP
+
+### 11.3 Progressive Feature Introduction
+
+To avoid overwhelming new users while still building toward the full feature set:
+
+1. **Feature Gates**:
+   - Introduce advanced features only after user has successfully created basic circuits
+   - Use "New Feature" badges to gradually highlight capabilities as users progress
+
+2. **Default Configurations**:
+   - Start with simplified view configurations that can be expanded as users gain confidence
+   - Pre-collapse optional panels by default, allowing users to discover them organically
+
+3. **Achievement-Based Progression**:
+   - Unlock advanced features after users successfully complete basic operations
+   - Create a natural learning progression that introduces complexity gradually
+
+### 11.4 MVP Features Priority Matrix
+
+| Feature | Priority | MVP Status | Complexity Reduction Strategy |
+|---------|----------|------------|-------------------------------|
+| Basic Circuit Canvas | High | Include | Limit to 3 qubits maximum |
+| Essential Gate Set | High | Include | Only H, X, Z, CNOT gates |
+| Basic Simulation | High | Include | Simple visualization only |
+| Save/Load | High | Include | Basic functionality without management |
+| Tooltips | Medium | Include | Minimal, focused on gate function |
+| Export to QASM | Medium | Include | Simple export without options |
+| Full Tutorial | Low | Defer | Replace with contextual hints |
+| My Circuits Management | Low | Defer | Simplify to basic list view |
+| Advanced Gates | Low | Defer | Introduce in later releases |
+
+By implementing these simplification strategies, the MVP will maintain focus on the core educational experience while reducing cognitive load for new users. This approach creates a solid foundation that can be expanded upon in subsequent releases as users become more comfortable with the basic concepts.
+
+## 12. Functional Requirements Alignment
+
+This section explicitly maps each UI requirement to the corresponding functional requirement in the [Functional Requirements for Quantum Circuit Editor MVP](/docs/functional_requirements_mvp.md) document to ensure complete alignment and prevent scope creep.
+
+### 12.1 User Interface Alignment
+
+| UI Requirement | Functional Requirement | Implementation Notes |
+|----------------|------------------------|---------------------|
+| Circuit Editor Workspace with drag-and-drop interface | 1.1. Provide a web-based drag-and-drop interface for creating quantum circuits | The Circuit Canvas Area implements this with drag handles and visual feedback |
+| Visual feedback during circuit construction | 1.2. Support simple and intuitive circuit construction with visual feedback | Implemented through highlighting valid drop zones and shadows during drag operations |
+| Clear gate representations in Circuit Canvas | 1.3. Enable basic circuit visualization with clear gate representation | Gates have distinct visual designs and clear labeling |
+| Simplified UI in MVP Simplification Strategy | 1.4. Implement a clean, straightforward UI avoiding overbloated features | Features prioritized in section 11.4 MVP Features Priority Matrix |
+
+### 12.2 Quantum Circuit Components Alignment
+
+| UI Requirement | Functional Requirement | Implementation Notes |
+|----------------|------------------------|---------------------|
+| Gate Palette with X, Y, Z, H, CNOT gates | 2.1. Support basic quantum gates only | Gate Palette Panel includes only the required gates with visual representations |
+| Number of qubits selector (2-5) in Control Panel | 2.2. Allow circuits of 2-5 qubits for educational purposes | Limited to 3 qubits in MVP (section 11.2) with expansion to 5 in later versions |
+| Drag-and-drop gate placement in Circuit Canvas | 2.3. Enable simple circuit construction by dragging gates onto qubit lines | Implemented through Interaction Requirements in section 4.2 |
+
+### 12.3 Simulation Capabilities Alignment
+
+| UI Requirement | Functional Requirement | Implementation Notes |
+|----------------|------------------------|---------------------|
+| "Run Simulation" button in Control Panel | 3.1. Provide basic circuit simulation functionality | Primary action button with visual prominence |
+| Bar chart visualization in Results Panel | 3.2. Display probability distribution of measurement outcomes | Results Panel expands after simulation with measurement outcomes |
+| Clear explanation of results in Results Panel | 3.3. Include simple visualization of circuit execution results | Educational explanations included with results |
+| Circuit optimization for 2-5 qubits | 3.4. Optimize simulation for small educational circuits (2-5 qubits) | Canvas and rendering optimized for this scale |
+
+### 12.4 Export Functionality Alignment
+
+| UI Requirement | Functional Requirement | Implementation Notes |
+|----------------|------------------------|---------------------|
+| Export to QASM button and workflow | 4.1. Support export to QASM format | Implemented in Header/Toolbar Area and through Export Dialog |
+| Save/Load buttons and My Circuits Screen | 4.2. Enable saving and loading of circuit designs | Save Dialog and My Circuits Screen implementation |
+
+### 12.5 Non-Functional Requirements Alignment
+
+| UI Requirement | Functional Requirement | Implementation Notes |
+|----------------|------------------------|---------------------|
+| Performance expectations in section 9 | 1.1. Responsive interface suitable for educational use | Defined specific loading indicators and rendering optimization |
+| Clean UI design for beginners (section 7) | 2.1. Intuitive enough for beginners with no quantum computing experience | Educational focus in visual design guidelines |
+| Visual feedback during operations (section 6) | 2.2. Clear visual feedback during circuit construction | Defined in Interaction Requirements and Special UI Considerations |
+| Help/Tutorial features (section 4.4) | 2.3. Simple help/tutorial system to guide new users | Simplified to tooltips and contextual help for MVP |
+| Responsive design for desktop browsers | 3.1. Web-based application compatible with major browsers | Defined in Responsive Behavior section |
+
+### 12.6 Out of Scope UI Elements
+
+The following elements are explicitly excluded from the UI as they correspond to out-of-scope functional requirements:
+
+1. UI components for extended gate sets beyond the specified basic gates
+2. Custom gate creation interface
+3. Hardware execution configuration panels
+4. Advanced visualization tools such as Bloch sphere representations
+5. Noise modeling controls
+6. UI elements supporting circuits larger than 5 qubits
+7. Collaboration features such as sharing or multi-user editing
+8. Integration panels for classical computing tools
+
+This alignment ensures that all UI requirements directly support the defined functional requirements without introducing scope creep, while providing clear traceability between the two documents.
