@@ -71,7 +71,7 @@
                     <span class="logo">QCE</span>
                     <h1>Quantum Circuit Editor</h1>
                 </div>
-                
+
                 <div class="circuit-controls">
                     <div class="circuit-name">
                         <input type="text" id="circuitName" placeholder="Untitled Circuit">
@@ -140,7 +140,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="gate-category">
                             <h3>Multi-Qubit Gates</h3>
                             <div class="gate-grid">
@@ -153,7 +153,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="gate-info">
                             <i class="fas fa-info-circle"></i>
                             <span>Drag gates to the circuit canvas</span>
@@ -172,7 +172,7 @@
                                 <button class="increase">+</button>
                             </div>
                         </div>
-                        
+
                         <div class="canvas-actions">
                             <button class="btn btn-danger" id="clearCircuitBtn">
                                 <i class="fas fa-trash-alt"></i> Clear
@@ -211,16 +211,16 @@
                                 <div class="qubit-label">q[2]</div>
                                 <div class="qubit-wire"></div>
                             </div>
-                            
+
                             <!-- This is a placeholder for gates that would be positioned on the wires -->
                             <div class="placed-gate" style="top: 20px; left: 150px;">
                                 <div class="gate-visual h-gate">H</div>
                             </div>
-                            
+
                             <div class="placed-gate" style="top: 80px; left: 250px;">
                                 <div class="gate-visual x-gate">X</div>
                             </div>
-                            
+
                             <!-- CNOT gate with connecting line -->
                             <div class="cnot-connection" style="top: 140px; left: 200px; height: 120px;">
                                 <div class="control-point"></div>
@@ -258,7 +258,7 @@
                                 <h3>Measurement Probabilities</h3>
                                 <p>Circuit with 3 qubits and 5 gates</p>
                             </div>
-                            
+
                             <div class="probability-chart">
                                 <!-- Sample bars for visualization -->
                                 <div class="chart-bar">
@@ -310,11 +310,11 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="results-explanation">
                                 <h4>What does this mean?</h4>
                                 <p>
-                                    The chart shows the probability of measuring each possible state. 
+                                    The chart shows the probability of measuring each possible state.
                                     In this circuit, you're most likely to measure the state |110⟩, with 40% probability.
                                 </p>
                                 <button class="btn btn-primary btn-sm">
@@ -462,59 +462,59 @@
             const prevBtn = document.getElementById('prevStep');
             const nextBtn = document.getElementById('nextStep');
             let currentStep = 1;
-            
-            // Show tutorial 
+
+            // Show tutorial
             document.getElementById('showTutorialBtn').addEventListener('click', function() {
                 document.getElementById('tutorialOverlay').classList.remove('hidden');
             });
-            
+
             // Close tutorial
             document.getElementById('closeTutorial').addEventListener('click', function() {
                 document.getElementById('tutorialOverlay').classList.add('hidden');
             });
-            
+
             // Tutorial navigation
             function showStep(step) {
                 tutorialSteps.forEach(s => s.classList.remove('active'));
                 tutorialDots.forEach(d => d.classList.remove('active'));
-                
+
                 document.querySelector(`.tutorial-step[data-step="${step}"]`).classList.add('active');
                 document.querySelector(`.dot[data-step="${step}"]`).classList.add('active');
-                
+
                 prevBtn.disabled = step === 1;
                 nextBtn.disabled = step === tutorialSteps.length;
-                
+
                 currentStep = step;
             }
-            
+
             prevBtn.addEventListener('click', function() {
                 if (currentStep > 1) showStep(currentStep - 1);
             });
-            
+
             nextBtn.addEventListener('click', function() {
                 if (currentStep < tutorialSteps.length) showStep(currentStep + 1);
             });
-            
+
             tutorialDots.forEach(dot => {
                 dot.addEventListener('click', function() {
                     showStep(parseInt(this.dataset.step));
                 });
             });
-            
+
             document.getElementById('skipTutorial').addEventListener('click', function() {
                 document.getElementById('tutorialOverlay').classList.add('hidden');
             });
-            
+
             document.getElementById('startEditor').addEventListener('click', function() {
                 document.getElementById('tutorialOverlay').classList.add('hidden');
             });
-            
+
             // Toggle panels
             document.querySelectorAll('.panel-toggle').forEach(toggle => {
                 toggle.addEventListener('click', function() {
                     const panel = this.closest('.panel');
                     panel.classList.toggle('collapsed');
-                    
+
                     // Update icon
                     const icon = this.querySelector('i');
                     if (panel.classList.contains('collapsed')) {
@@ -526,12 +526,12 @@
                     }
                 });
             });
-            
+
             // Circuit history toggle
             document.querySelector('.history-toggle').addEventListener('click', function() {
                 const history = document.getElementById('circuitHistory');
                 history.classList.toggle('collapsed');
-                
+
                 // Update icon
                 const icon = this.querySelector('i');
                 if (history.classList.contains('collapsed')) {
@@ -542,24 +542,24 @@
                     icon.classList.add('fa-chevron-left');
                 }
             });
-            
+
             // Run simulation
             document.getElementById('runSimulationBtn').addEventListener('click', function() {
                 // Hide empty state if visible
                 document.getElementById('canvasEmptyState').classList.add('hidden');
                 document.getElementById('circuitGrid').classList.remove('hidden');
-                
+
                 // Show results
                 const resultsPanel = document.querySelector('.results-panel');
                 resultsPanel.classList.remove('collapsed');
                 resultsPanel.querySelector('.panel-toggle i').classList.remove('fa-chevron-right');
                 resultsPanel.querySelector('.panel-toggle i').classList.add('fa-chevron-left');
-                
+
                 // Hide empty results state, show data
                 resultsPanel.querySelector('.results-empty-state').classList.add('hidden');
                 resultsPanel.querySelector('.results-data').classList.remove('hidden');
             });
-            
+
             // Sign in button
             document.getElementById('signInBtn').addEventListener('click', function() {
                 document.getElementById('welcomeOverlay').classList.remove('hidden');
