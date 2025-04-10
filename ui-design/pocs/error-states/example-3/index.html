@@ -11,12 +11,12 @@
 <body>
     <div class="mockup-container">
         <h1>Error State Example 3: Inline Context-Aware Notifications</h1>
-        
+
         <div class="mockup-description">
             <p>This mockup demonstrates how error states can be shown using inline context-aware notifications. Each notification appears near the problematic area, providing specific guidance about the error and offering suggestions to fix it. The approach combines visual highlighting with actionable messages to improve the user experience.</p>
             <p><strong>The error notifications are positioned near the problematic gates with error-specific messages.</strong></p>
         </div>
-        
+
         <div class="circuit-canvas">
             <!-- Time steps indicators -->
             <div class="time-steps">
@@ -25,71 +25,71 @@
                 <div class="time-step error">t = 2</div>
                 <div class="time-step">t = 3</div>
             </div>
-            
+
             <!-- Time step error highlight -->
             <div class="time-step-highlight"></div>
-            
+
             <div class="circuit-grid">
                 <!-- Qubit 0 -->
                 <div class="qubit-line">
                     <div class="qubit-label">q[0]</div>
                     <div class="qubit-wire"></div>
                 </div>
-                
+
                 <!-- Qubit 1 -->
                 <div class="qubit-line">
                     <div class="qubit-label">q[1]</div>
                     <div class="qubit-wire"></div>
                 </div>
-                
+
                 <!-- Qubit 2 -->
                 <div class="qubit-line">
                     <div class="qubit-label">q[2]</div>
                     <div class="qubit-wire"></div>
                 </div>
-                
+
                 <!-- Valid H gate -->
                 <div class="placed-gate" style="top: 10px; left: 90px;">
                     <div class="gate-visual h-gate">H</div>
                 </div>
-                
+
                 <!-- Error: Duplicate gate at same time step -->
                 <div class="placed-gate" style="top: 10px; left: 250px;">
                     <div class="gate-visual h-gate gate-with-error">H</div>
                 </div>
-                
+
                 <!-- Error: H gate at same time step -->
                 <div class="placed-gate" style="top: 10px; left: 250px; transform: translateX(-5px);">
                     <div class="gate-visual x-gate gate-with-error">X</div>
                 </div>
-                
+
                 <!-- Valid CNOT gate -->
                 <div class="cnot-connection" style="top: 90px; left: 170px; height: 60px;">
                     <div class="control-point"></div>
                     <div class="target-point">⊕</div>
                 </div>
-                
+
                 <!-- Error: Invalid CNOT connection -->
                 <div class="cnot-connection error" style="top: 150px; left: 330px; height: 60px;">
                     <div class="control-point error"></div>
                     <div class="target-point error">⊕</div>
                 </div>
-                
+
                 <!-- Valid X gate -->
                 <div class="placed-gate" style="top: 190px; left: 90px;">
                     <div class="gate-visual x-gate">X</div>
                 </div>
-                
+
                 <!-- Valid Y gate -->
                 <div class="placed-gate" style="top: 70px; left: 330px;">
                     <div class="gate-visual y-gate">Y</div>
                 </div>
-                
+
                 <!-- Error: Same qubit gate error -->
                 <div class="placed-gate" style="top: 190px; left: 250px;">
                     <div class="gate-visual z-gate gate-with-error">Z</div>
                 </div>
-                
+
                 <!-- Error notifications -->
                 <div class="error-notification time-conflict">
                     <div class="error-icon">
@@ -103,7 +103,7 @@
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                
+
                 <div class="error-notification cnot-error">
                     <div class="error-icon">
                         <i class="fas fa-exclamation-circle"></i>
@@ -116,7 +116,7 @@
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                
+
                 <div class="error-notification sequence-error">
                     <div class="error-icon">
                         <i class="fas fa-exclamation-circle"></i>
@@ -131,7 +131,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Error summary banner -->
         <div class="error-summary">
             <div class="error-summary-icon">
@@ -142,7 +142,7 @@
             <button class="error-summary-action">View Details</button>
         </div>
     </div>
-    
+
     <script>
         document.querySelectorAll('.error-dismiss').forEach(button => {
             button.addEventListener('click', function() {

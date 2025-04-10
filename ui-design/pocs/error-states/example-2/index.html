@@ -11,12 +11,12 @@
 <body>
     <div class="mockup-container">
         <h1>Error State Example 2: Error Validation Panel</h1>
-        
+
         <div class="mockup-description">
             <p>This mockup demonstrates how error states can be shown using a dedicated validation panel. The panel shows a list of all errors in the circuit and provides details for each one. Users can click on errors to highlight the corresponding gates on the circuit canvas.</p>
             <p><strong>Click on errors in the validation panel to see the affected gates highlighted in the circuit.</strong></p>
         </div>
-        
+
         <div class="circuit-interface">
             <div class="circuit-canvas">
                 <!-- Time steps indicators -->
@@ -26,77 +26,77 @@
                     <div class="time-step">t = 2</div>
                     <div class="time-step">t = 3</div>
                 </div>
-                
+
                 <div class="circuit-grid">
                     <!-- Qubit 0 -->
                     <div class="qubit-line">
                         <div class="qubit-label">q[0]</div>
                         <div class="qubit-wire"></div>
                     </div>
-                    
+
                     <!-- Qubit 1 -->
                     <div class="qubit-line">
                         <div class="qubit-label">q[1]</div>
                         <div class="qubit-wire"></div>
                     </div>
-                    
+
                     <!-- Qubit 2 -->
                     <div class="qubit-line">
                         <div class="qubit-label">q[2]</div>
                         <div class="qubit-wire"></div>
                     </div>
-                    
+
                     <!-- Valid H gate -->
                     <div class="placed-gate" style="top: 10px; left: 90px;">
                         <div class="gate-visual h-gate">H</div>
                     </div>
-                    
+
                     <!-- Error: Duplicate gate at same time step -->
                     <div class="placed-gate" style="top: 10px; left: 250px;">
                         <div id="error-gate-1" class="gate-visual h-gate gate-with-error active">H</div>
                     </div>
-                    
+
                     <!-- Error: H gate at same time step -->
                     <div class="placed-gate" style="top: 10px; left: 250px; transform: translateX(-5px);">
                         <div class="gate-visual x-gate gate-with-error active">X</div>
                     </div>
-                    
+
                     <!-- Valid CNOT gate -->
                     <div class="cnot-connection" style="top: 90px; left: 170px; height: 60px;">
                         <div class="control-point"></div>
                         <div class="target-point">⊕</div>
                     </div>
-                    
+
                     <!-- Error: Invalid CNOT connection -->
                     <div id="error-cnot" class="cnot-connection error" style="top: 150px; left: 330px; height: 60px;">
                         <div class="control-point error"></div>
                         <div class="target-point error">⊕</div>
                     </div>
-                    
+
                     <!-- Valid X gate -->
                     <div class="placed-gate" style="top: 190px; left: 90px;">
                         <div class="gate-visual x-gate">X</div>
                     </div>
-                    
+
                     <!-- Valid Y gate -->
                     <div class="placed-gate" style="top: 70px; left: 330px;">
                         <div class="gate-visual y-gate">Y</div>
                     </div>
-                    
+
                     <!-- Error: Same qubit gate error -->
                     <div class="placed-gate" style="top: 190px; left: 250px;">
                         <div id="error-gate-2" class="gate-visual z-gate gate-with-error">Z</div>
                     </div>
                 </div>
             </div>
-            
+
             <!-- Validation Panel -->
             <div class="validation-panel">
                 <div class="validation-header">
                     <i class="fas fa-exclamation-triangle"></i>
                     <h3>Circuit Validation</h3>
                 </div>
-                
+
                 <div class="validation-content">
                     <ul class="error-list">
                         <li id="error-item-1" class="error-item active">
@@ -110,7 +110,7 @@
                                 <button class="error-jump">Jump to error</button>
                             </div>
                         </li>
-                        
+
                         <li id="error-item-2" class="error-item">
                             <div class="error-icon">
                                 <i class="fas fa-exclamation-circle"></i>
@@ -122,7 +122,7 @@
                                 <button class="error-jump">Jump to error</button>
                             </div>
                         </li>
-                        
+
                         <li id="error-item-3" class="error-item">
                             <div class="error-icon">
                                 <i class="fas fa-exclamation-circle"></i>
@@ -136,7 +136,7 @@
                         </li>
                     </ul>
                 </div>
-                
+
                 <div class="validation-footer">
                     <div class="validation-counter">
                         <span>3</span> errors found
@@ -149,7 +149,7 @@
             </div>
         </div>
     </div>
-    
+
     <script>
         // Simplified interaction for mockup purposes
         document.querySelectorAll('.error-item').forEach(item => {
@@ -158,12 +158,12 @@
                 document.querySelectorAll('.error-item').forEach(i => i.classList.remove('active'));
                 // Add active class to clicked item
                 this.classList.add('active');
-                
+
                 // Remove active class from all gates with errors
                 document.querySelectorAll('.gate-with-error, .cnot-connection.error').forEach(
                     gate => gate.classList.remove('active')
                 );
-                
+
                 // Add active class to corresponding gate based on the error item ID
                 const itemId = this.id;
                 if (itemId === 'error-item-1') {

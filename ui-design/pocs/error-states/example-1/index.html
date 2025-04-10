@@ -11,14 +11,14 @@
 <body>
     <div class="mockup-container">
         <h1>Error State Example 1: Inline Error Tooltips</h1>
-        
+
         <div class="mockup-description">
-            <p>This mockup demonstrates how error states can be shown using inline tooltips that appear when hovering over gates with errors. 
-            Each problematic gate shows a red error indicator badge with an exclamation mark. When the user hovers over the gate, 
+            <p>This mockup demonstrates how error states can be shown using inline tooltips that appear when hovering over gates with errors.
+            Each problematic gate shows a red error indicator badge with an exclamation mark. When the user hovers over the gate,
             a tooltip appears with a detailed explanation of the error.</p>
             <p><strong>Hover over gates with red badges to see error messages.</strong></p>
         </div>
-        
+
         <div class="circuit-canvas">
             <!-- Time steps indicators -->
             <div class="time-steps">
@@ -27,31 +27,31 @@
                 <div class="time-step">t = 2</div>
                 <div class="time-step">t = 3</div>
             </div>
-            
+
             <div class="circuit-grid">
                 <!-- Qubit 0 -->
                 <div class="qubit-line">
                     <div class="qubit-label">q[0]</div>
                     <div class="qubit-wire"></div>
                 </div>
-                
+
                 <!-- Qubit 1 -->
                 <div class="qubit-line">
                     <div class="qubit-label">q[1]</div>
                     <div class="qubit-wire"></div>
                 </div>
-                
+
                 <!-- Qubit 2 -->
                 <div class="qubit-line">
                     <div class="qubit-label">q[2]</div>
                     <div class="qubit-wire"></div>
                 </div>
-                
+
                 <!-- Valid H gate -->
                 <div class="placed-gate" style="top: 10px; left: 90px;">
                     <div class="gate-visual h-gate">H</div>
                 </div>
-                
+
                 <!-- Error: Duplicate gate at same time step -->
                 <div class="placed-gate" style="top: 10px; left: 250px;">
                     <div class="gate-visual h-gate gate-with-error">H
@@ -61,18 +61,18 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Error: H gate at same time step -->
                 <div class="placed-gate" style="top: 10px; left: 250px; transform: translateX(-5px);">
                     <div class="gate-visual x-gate">X</div>
                 </div>
-                
+
                 <!-- Valid CNOT gate -->
                 <div class="cnot-connection" style="top: 90px; left: 170px; height: 60px;">
                     <div class="control-point"></div>
                     <div class="target-point">⊕</div>
                 </div>
-                
+
                 <!-- Error: Invalid CNOT connection -->
                 <div class="cnot-connection error" style="top: 150px; left: 330px; height: 60px;">
                     <div class="control-point error"></div>
@@ -83,17 +83,17 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Valid X gate -->
                 <div class="placed-gate" style="top: 190px; left: 90px;">
                     <div class="gate-visual x-gate">X</div>
                 </div>
-                
+
                 <!-- Valid Y gate -->
                 <div class="placed-gate" style="top: 70px; left: 330px;">
                     <div class="gate-visual y-gate">Y</div>
                 </div>
-                
+
                 <!-- Error: Same qubit gate error -->
                 <div class="placed-gate" style="top: 190px; left: 250px;">
                     <div class="gate-visual z-gate gate-with-error pulse-animation">Z
@@ -104,7 +104,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="error-legend">
                 <div class="legend-item">
                     <div class="legend-color legend-error"></div>
