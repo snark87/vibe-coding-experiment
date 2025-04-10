@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Circuit Editor</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Welcome overlay - shown on first visit -->
+        <div class="welcome-overlay" id="welcomeOverlay">
+            <div class="welcome-card">
+                <div class="welcome-content">
+                    <h1>Quantum Circuit Editor</h1>
+                    <p class="welcome-description">
+                        An educational tool for learning quantum computing through visual circuit design.
+                        No prior quantum computing or programming experience necessary.
+                    </p>
+
+                    <div class="welcome-features">
+                        <div class="feature">
+                            <div class="feature-icon"><i class="fas fa-puzzle-piece"></i></div>
+                            <div class="feature-text">
+                                <h3>Intuitive Interface</h3>
+                                <p>Drag and drop quantum gates to build circuits</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon"><i class="fas fa-microchip"></i></div>
+                            <div class="feature-text">
+                                <h3>Instant Simulation</h3>
+                                <p>See results immediately with visual feedback</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon"><i class="fas fa-graduation-cap"></i></div>
+                            <div class="feature-text">
+                                <h3>Learning Focused</h3>
+                                <p>Built for educational environments</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="auth-section">
+                        <button class="btn btn-primary" id="googleAuthBtn">
+                            <i class="fab fa-google"></i> Sign in with Google
+                        </button>
+                        <button class="btn btn-secondary" id="guestModeBtn">
+                            Continue as Guest
+                        </button>
+                        <p class="auth-note">
+                            <i class="fas fa-info-circle"></i> Guest mode has limited saving capabilities
+                        </p>
+                    </div>
+                </div>
+
+                <div class="welcome-image">
+                    <img src="https://placeholder.pics/svg/400x400/DEDEDE/555555/quantum-circuit" alt="Quantum Circuit Example">
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Application Interface -->
+        <div class="app-interface">
+            <!-- Header/toolbar area -->
+            <header class="app-header">
+                <div class="logo-container">
+                    <span class="logo">QCE</span>
+                    <h1>Quantum Circuit Editor</h1>
+                </div>
+                
+                <div class="circuit-controls">
+                    <div class="circuit-name">
+                        <input type="text" id="circuitName" placeholder="Untitled Circuit">
+                    </div>
+                    <div class="toolbar-buttons">
+                        <button class="btn btn-icon" title="New Circuit">
+                            <i class="fas fa-file"></i>
+                        </button>
+                        <button class="btn btn-icon" title="Save Circuit">
+                            <i class="fas fa-save"></i>
+                        </button>
+                        <button class="btn btn-icon" title="Export to QASM">
+                            <i class="fas fa-file-export"></i>
+                        </button>
+                        <button class="btn btn-icon" title="Help">
+                            <i class="fas fa-question-circle"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="user-section">
+                    <div class="user-status guest">
+                        <span class="user-label">Guest Mode</span>
+                        <button class="btn btn-small" id="signInBtn">Sign In</button>
+                    </div>
+                    <!-- This is hidden by default, shown when logged in -->
+                    <div class="user-status logged-in hidden">
+                        <img src="https://placeholder.pics/svg/32/DEDEDE/555555/U" class="user-avatar" alt="User avatar">
+                        <span class="user-name">User Name</span>
+                        <button class="btn btn-icon" id="userMenuBtn">
+                            <i class="fas fa-caret-down"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main content area -->
+            <main class="main-content">
+                <!-- Left panel - Gate palette -->
+                <aside class="gate-palette panel">
+                    <div class="panel-header">
+                        <h2>Gate Palette</h2>
+                        <button class="btn btn-icon panel-toggle" title="Collapse panel">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                    </div>
+                    <div class="panel-content">
+                        <div class="gate-category">
+                            <h3>Single-Qubit Gates</h3>
+                            <div class="gate-grid">
+                                <div class="gate" draggable="true" data-gate-type="h">
+                                    <div class="gate-visual h-gate">H</div>
+                                    <span class="gate-label">Hadamard</span>
+                                </div>
+                                <div class="gate" draggable="true" data-gate-type="x">
+                                    <div class="gate-visual x-gate">X</div>
+                                    <span class="gate-label">NOT Gate</span>
+                                </div>
+                                <div class="gate" draggable="true" data-gate-type="y">
+                                    <div class="gate-visual y-gate">Y</div>
+                                    <span class="gate-label">Y Gate</span>
+                                </div>
+                                <div class="gate" draggable="true" data-gate-type="z">
+                                    <div class="gate-visual z-gate">Z</div>
+                                    <span class="gate-label">Z Gate</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="gate-category">
+                            <h3>Multi-Qubit Gates</h3>
+                            <div class="gate-grid">
+                                <div class="gate" draggable="true" data-gate-type="cnot">
+                                    <div class="gate-visual cnot-gate">
+                                        <div class="cnot-dot">•</div>
+                                        <div class="cnot-target">⊕</div>
+                                    </div>
+                                    <span class="gate-label">CNOT Gate</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="gate-info">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Drag gates to the circuit canvas</span>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Center area - Circuit canvas -->
+                <section class="circuit-canvas-container">
+                    <div class="canvas-toolbar">
+                        <div class="qubit-controls">
+                            <label for="qubitCount">Qubits:</label>
+                            <div class="number-input">
+                                <button class="decrease">-</button>
+                                <input type="number" id="qubitCount" min="2" max="5" value="3">
+                                <button class="increase">+</button>
+                            </div>
+                        </div>
+                        
+                        <div class="canvas-actions">
+                            <button class="btn btn-danger" id="clearCircuitBtn">
+                                <i class="fas fa-trash-alt"></i> Clear
+                            </button>
+                            <button class="btn btn-primary" id="runSimulationBtn">
+                                <i class="fas fa-play"></i> Run Simulation
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="circuit-canvas" id="circuitCanvas">
+                        <!-- Empty state message -->
+                        <div class="canvas-empty-state" id="canvasEmptyState">
+                            <div class="empty-state-icon">
+                                <i class="fas fa-atom"></i>
+                            </div>
+                            <h3>Your Circuit is Empty</h3>
+                            <p>Drag gates from the palette to start building your quantum circuit</p>
+                            <button class="btn btn-secondary" id="showTutorialBtn">
+                                <i class="fas fa-lightbulb"></i> Show Tutorial
+                            </button>
+                        </div>
+
+                        <!-- Circuit will be drawn here when not empty -->
+                        <div class="circuit-grid hidden" id="circuitGrid">
+                            <!-- Qubit lines will be generated dynamically -->
+                            <div class="qubit-line">
+                                <div class="qubit-label">q[0]</div>
+                                <div class="qubit-wire"></div>
+                            </div>
+                            <div class="qubit-line">
+                                <div class="qubit-label">q[1]</div>
+                                <div class="qubit-wire"></div>
+                            </div>
+                            <div class="qubit-line">
+                                <div class="qubit-label">q[2]</div>
+                                <div class="qubit-wire"></div>
+                            </div>
+                            
+                            <!-- This is a placeholder for gates that would be positioned on the wires -->
+                            <div class="placed-gate" style="top: 20px; left: 150px;">
+                                <div class="gate-visual h-gate">H</div>
+                            </div>
+                            
+                            <div class="placed-gate" style="top: 80px; left: 250px;">
+                                <div class="gate-visual x-gate">X</div>
+                            </div>
+                            
+                            <!-- CNOT gate with connecting line -->
+                            <div class="cnot-connection" style="top: 140px; left: 200px; height: 120px;">
+                                <div class="control-point"></div>
+                                <div class="connection-line"></div>
+                                <div class="target-point">⊕</div>
+                            </div>
+                        </div>
+
+                        <!-- Trash zone for removing gates -->
+                        <div class="trash-zone hidden" id="trashZone">
+                            <i class="fas fa-trash-alt"></i>
+                            <span>Drop here to delete</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Right panel - Results -->
+                <aside class="results-panel panel collapsed">
+                    <div class="panel-header">
+                        <h2>Simulation Results</h2>
+                        <button class="btn btn-icon panel-toggle" title="Expand panel">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="panel-content">
+                        <!-- Results will be shown here after simulation -->
+                        <div class="results-empty-state">
+                            <i class="fas fa-chart-bar"></i>
+                            <p>Run the simulation to see results</p>
+                        </div>
+
+                        <!-- These results are hidden initially -->
+                        <div class="results-data hidden">
+                            <div class="results-summary">
+                                <h3>Measurement Probabilities</h3>
+                                <p>Circuit with 3 qubits and 5 gates</p>
+                            </div>
+                            
+                            <div class="probability-chart">
+                                <!-- Sample bars for visualization -->
+                                <div class="chart-bar">
+                                    <div class="bar-label">|000⟩</div>
+                                    <div class="bar-container">
+                                        <div class="bar" style="height: 15%;">15%</div>
+                                    </div>
+                                </div>
+                                <div class="chart-bar">
+                                    <div class="bar-label">|001⟩</div>
+                                    <div class="bar-container">
+                                        <div class="bar" style="height: 5%;">5%</div>
+                                    </div>
+                                </div>
+                                <div class="chart-bar">
+                                    <div class="bar-label">|010⟩</div>
+                                    <div class="bar-container">
+                                        <div class="bar" style="height: 10%;">10%</div>
+                                    </div>
+                                </div>
+                                <div class="chart-bar">
+                                    <div class="bar-label">|011⟩</div>
+                                    <div class="bar-container">
+                                        <div class="bar" style="height: 5%;">5%</div>
+                                    </div>
+                                </div>
+                                <div class="chart-bar">
+                                    <div class="bar-label">|100⟩</div>
+                                    <div class="bar-container">
+                                        <div class="bar" style="height: 5%;">5%</div>
+                                    </div>
+                                </div>
+                                <div class="chart-bar">
+                                    <div class="bar-label">|101⟩</div>
+                                    <div class="bar-container">
+                                        <div class="bar" style="height: 10%;">10%</div>
+                                    </div>
+                                </div>
+                                <div class="chart-bar">
+                                    <div class="bar-label">|110⟩</div>
+                                    <div class="bar-container">
+                                        <div class="bar" style="height: 40%;">40%</div>
+                                    </div>
+                                </div>
+                                <div class="chart-bar">
+                                    <div class="bar-label">|111⟩</div>
+                                    <div class="bar-container">
+                                        <div class="bar" style="height: 10%;">10%</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="results-explanation">
+                                <h4>What does this mean?</h4>
+                                <p>
+                                    The chart shows the probability of measuring each possible state. 
+                                    In this circuit, you're most likely to measure the state |110⟩, with 40% probability.
+                                </p>
+                                <button class="btn btn-primary btn-sm">
+                                    <i class="fas fa-redo"></i> Run Again
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </main>
+
+            <!-- Circuit history sidebar (collapsed by default) -->
+            <div class="circuit-history collapsed" id="circuitHistory">
+                <div class="circuit-history-header">
+                    <h2>My Circuits</h2>
+                    <button class="btn btn-icon history-toggle" title="Expand history">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="circuit-history-content">
+                    <div class="circuit-list">
+                        <div class="circuit-item">
+                            <div class="circuit-thumbnail">
+                                <div class="thumbnail-preview"></div>
+                            </div>
+                            <div class="circuit-details">
+                                <h4>Bell State</h4>
+                                <span class="circuit-date">April 10, 2025</span>
+                            </div>
+                            <div class="circuit-actions">
+                                <button class="btn btn-icon btn-sm" title="Load circuit">
+                                    <i class="fas fa-folder-open"></i>
+                                </button>
+                                <button class="btn btn-icon btn-sm" title="Delete circuit">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="circuit-item">
+                            <div class="circuit-thumbnail">
+                                <div class="thumbnail-preview"></div>
+                            </div>
+                            <div class="circuit-details">
+                                <h4>Grover's Search</h4>
+                                <span class="circuit-date">April 9, 2025</span>
+                            </div>
+                            <div class="circuit-actions">
+                                <button class="btn btn-icon btn-sm" title="Load circuit">
+                                    <i class="fas fa-folder-open"></i>
+                                </button>
+                                <button class="btn btn-icon btn-sm" title="Delete circuit">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="circuit-item">
+                            <div class="circuit-thumbnail">
+                                <div class="thumbnail-preview"></div>
+                            </div>
+                            <div class="circuit-details">
+                                <h4>Quantum Teleportation</h4>
+                                <span class="circuit-date">April 8, 2025</span>
+                            </div>
+                            <div class="circuit-actions">
+                                <button class="btn btn-icon btn-sm" title="Load circuit">
+                                    <i class="fas fa-folder-open"></i>
+                                </button>
+                                <button class="btn btn-icon btn-sm" title="Delete circuit">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick tutorial overlay (hidden by default) -->
+        <div class="tutorial-overlay hidden" id="tutorialOverlay">
+            <div class="tutorial-card">
+                <div class="tutorial-header">
+                    <h2>Getting Started</h2>
+                    <button class="btn btn-icon close-tutorial" id="closeTutorial">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="tutorial-content">
+                    <div class="tutorial-step active" data-step="1">
+                        <h3><i class="fas fa-puzzle-piece"></i> Step 1: Add Gates</h3>
+                        <p>Drag quantum gates from the left palette onto the circuit canvas.</p>
+                        <img src="https://placeholder.pics/svg/300x150/DEDEDE/555555/drag-gates" alt="Drag gates tutorial">
+                    </div>
+                    <div class="tutorial-step" data-step="2">
+                        <h3><i class="fas fa-arrows-alt"></i> Step 2: Position Gates</h3>
+                        <p>Arrange gates by dragging them along the qubit lines. Use CNOT to connect qubits.</p>
+                        <img src="https://placeholder.pics/svg/300x150/DEDEDE/555555/position-gates" alt="Position gates tutorial">
+                    </div>
+                    <div class="tutorial-step" data-step="3">
+                        <h3><i class="fas fa-play"></i> Step 3: Run Simulation</h3>
+                        <p>Click the "Run Simulation" button to see measurement probabilities.</p>
+                        <img src="https://placeholder.pics/svg/300x150/DEDEDE/555555/run-simulation" alt="Run simulation tutorial">
+                    </div>
+                    <div class="tutorial-step" data-step="4">
+                        <h3><i class="fas fa-save"></i> Step 4: Save Your Work</h3>
+                        <p>Name your circuit and save it to access it later.</p>
+                        <img src="https://placeholder.pics/svg/300x150/DEDEDE/555555/save-circuit" alt="Save circuit tutorial">
+                    </div>
+                </div>
+                <div class="tutorial-nav">
+                    <button class="btn btn-icon" id="prevStep" disabled>
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="tutorial-dots">
+                        <span class="dot active" data-step="1"></span>
+                        <span class="dot" data-step="2"></span>
+                        <span class="dot" data-step="3"></span>
+                        <span class="dot" data-step="4"></span>
+                    </div>
+                    <button class="btn btn-icon" id="nextStep">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                <div class="tutorial-actions">
+                    <button class="btn btn-secondary" id="skipTutorial">Skip Tutorial</button>
+                    <button class="btn btn-primary" id="startEditor">Get Started</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Minimal JS for prototype interactions -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Welcome overlay dismissal
+            document.getElementById('googleAuthBtn').addEventListener('click', function() {
+                document.getElementById('welcomeOverlay').classList.add('hidden');
+            });
+            document.getElementById('guestModeBtn').addEventListener('click', function() {
+                document.getElementById('welcomeOverlay').classList.add('hidden');
+            });
+
+            // Tutorial navigation
+            const tutorialSteps = document.querySelectorAll('.tutorial-step');
+            const tutorialDots = document.querySelectorAll('.dot');
+            const prevBtn = document.getElementById('prevStep');
+            const nextBtn = document.getElementById('nextStep');
+            let currentStep = 1;
+            
+            // Show tutorial 
+            document.getElementById('showTutorialBtn').addEventListener('click', function() {
+                document.getElementById('tutorialOverlay').classList.remove('hidden');
+            });
+            
+            // Close tutorial
+            document.getElementById('closeTutorial').addEventListener('click', function() {
+                document.getElementById('tutorialOverlay').classList.add('hidden');
+            });
+            
+            // Tutorial navigation
+            function showStep(step) {
+                tutorialSteps.forEach(s => s.classList.remove('active'));
+                tutorialDots.forEach(d => d.classList.remove('active'));
+                
+                document.querySelector(`.tutorial-step[data-step="${step}"]`).classList.add('active');
+                document.querySelector(`.dot[data-step="${step}"]`).classList.add('active');
+                
+                prevBtn.disabled = step === 1;
+                nextBtn.disabled = step === tutorialSteps.length;
+                
+                currentStep = step;
+            }
+            
+            prevBtn.addEventListener('click', function() {
+                if (currentStep > 1) showStep(currentStep - 1);
+            });
+            
+            nextBtn.addEventListener('click', function() {
+                if (currentStep < tutorialSteps.length) showStep(currentStep + 1);
+            });
+            
+            tutorialDots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    showStep(parseInt(this.dataset.step));
+                });
+            });
+            
+            document.getElementById('skipTutorial').addEventListener('click', function() {
+                document.getElementById('tutorialOverlay').classList.add('hidden');
+            });
+            
+            document.getElementById('startEditor').addEventListener('click', function() {
+                document.getElementById('tutorialOverlay').classList.add('hidden');
+            });
+            
+            // Toggle panels
+            document.querySelectorAll('.panel-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    const panel = this.closest('.panel');
+                    panel.classList.toggle('collapsed');
+                    
+                    // Update icon
+                    const icon = this.querySelector('i');
+                    if (panel.classList.contains('collapsed')) {
+                        icon.classList.remove('fa-chevron-left');
+                        icon.classList.add('fa-chevron-right');
+                    } else {
+                        icon.classList.remove('fa-chevron-right');
+                        icon.classList.add('fa-chevron-left');
+                    }
+                });
+            });
+            
+            // Circuit history toggle
+            document.querySelector('.history-toggle').addEventListener('click', function() {
+                const history = document.getElementById('circuitHistory');
+                history.classList.toggle('collapsed');
+                
+                // Update icon
+                const icon = this.querySelector('i');
+                if (history.classList.contains('collapsed')) {
+                    icon.classList.remove('fa-chevron-left');
+                    icon.classList.add('fa-chevron-right');
+                } else {
+                    icon.classList.remove('fa-chevron-right');
+                    icon.classList.add('fa-chevron-left');
+                }
+            });
+            
+            // Run simulation
+            document.getElementById('runSimulationBtn').addEventListener('click', function() {
+                // Hide empty state if visible
+                document.getElementById('canvasEmptyState').classList.add('hidden');
+                document.getElementById('circuitGrid').classList.remove('hidden');
+                
+                // Show results
+                const resultsPanel = document.querySelector('.results-panel');
+                resultsPanel.classList.remove('collapsed');
+                resultsPanel.querySelector('.panel-toggle i').classList.remove('fa-chevron-right');
+                resultsPanel.querySelector('.panel-toggle i').classList.add('fa-chevron-left');
+                
+                // Hide empty results state, show data
+                resultsPanel.querySelector('.results-empty-state').classList.add('hidden');
+                resultsPanel.querySelector('.results-data').classList.remove('hidden');
+            });
+            
+            // Sign in button
+            document.getElementById('signInBtn').addEventListener('click', function() {
+                document.getElementById('welcomeOverlay').classList.remove('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
