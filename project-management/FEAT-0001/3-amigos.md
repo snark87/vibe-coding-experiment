@@ -498,3 +498,60 @@ After reviewing the UI requirements and existing prototype, I'd like to provide 
    - Current design subtly indicates guest mode
    - Recommendation: Make session limitations more visible without being intrusive
    - The temporary nature of guest sessions should be clear throughout the experience
+
+### Error State UI Mockups
+
+After discussing the error state visualization options, I've created three different mockups to address how we can display errors in the quantum circuit editor:
+
+#### Error State Visualization Options
+
+1. **Inline Error Tooltips** ([View Mockup](/ui-design/pocs/error-states/example-1/index.html))
+   - **Description**: Errors are shown directly on the problematic gates with small red badges. When users hover over the gate, a tooltip appears with a detailed error message.
+   - **Pros**: 
+     - Minimally invasive to the UI
+     - Clear association between the error and the specific gate
+     - No permanent screen real estate required
+   - **Cons**:
+     - Errors are not immediately visible until hovered
+     - May be missed by beginners who don't know to hover
+     - Difficult to see multiple errors simultaneously
+
+2. **Dedicated Validation Panel** ([View Mockup](/ui-design/pocs/error-states/example-2/index.html))
+   - **Description**: A sidebar panel shows a list of all errors in the circuit with detailed explanations. Clicking on an error highlights the corresponding gates in the circuit.
+   - **Pros**:
+     - Comprehensive view of all errors at once
+     - More space for detailed explanations and educational content
+     - Clear organization of errors by type and location
+   - **Cons**:
+     - Requires dedicated screen space
+     - Creates spatial separation between errors and their visual location
+     - Could overwhelm beginners with too much information
+
+3. **Context-Aware Inline Notifications** ([View Mockup](/ui-design/pocs/error-states/example-3/index.html))
+   - **Description**: Error notifications appear directly adjacent to problematic areas with specific messages. Time steps with errors are highlighted, and a summary banner shows the total error count.
+   - **Pros**:
+     - Immediate visibility of errors
+     - Strong spatial association with error location
+     - Actionable messages with "Fix" buttons
+   - **Cons**:
+     - Can become visually cluttered with multiple errors
+     - May obscure parts of the circuit
+     - Notifications require dismissal management
+
+#### Recommendations
+
+Based on the educational focus of our application and the feedback from the quantum scientist about providing clear, beginner-friendly error messages, I recommend a **hybrid approach**:
+
+1. For beginners or first-time users:
+   - Use the **Context-Aware Inline Notifications** (Example 3) for immediate visibility and educational value
+   - Include a summary banner that can expand into a full validation panel for more details
+
+2. For returning users or advanced mode:
+   - Use **Inline Error Tooltips** (Example 1) for a cleaner interface once users become familiar with the system
+   - Provide an option to switch to the validation panel view for complex circuits
+
+3. Implementation considerations:
+   - Error indicators should use both color and icons for accessibility
+   - Consistent error message style across all visualization methods
+   - Clear visual distinction between different types of errors (time conflicts vs. connection errors)
+   - Include actionable suggestions for fixing common errors
