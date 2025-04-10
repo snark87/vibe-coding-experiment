@@ -16,8 +16,8 @@ The Quantum Circuit Editor is being developed as an educational tool for student
 
 ## User Story
 
-**As a** guest user without an account,  
-**I want to** create a basic quantum circuit using a drag-and-drop interface,  
+**As a** guest user without an account,
+**I want to** create a basic quantum circuit using a drag-and-drop interface,
 **So that** I can learn about quantum computing concepts without requiring authentication.
 
 ## Scope

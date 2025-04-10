@@ -67,7 +67,7 @@ See full details in [Guest User Circuit Creation Epic](../FEAT-0001-EPIC-guest-u
 ### Test Strategy Recommendations
 
 #### Automated Testing Needs
-1. **Unit Tests**: 
+1. **Unit Tests**:
    - Gate component rendering and interaction
    - Session storage functionality
    - Circuit validation logic
@@ -154,10 +154,10 @@ In response to the QA questions regarding circuit validation, I'd like to clarif
 #### What Makes a Circuit Valid
 
 1. **Quantum Gate Placement Rules**
-   - **Hadamard (H) Gates**: 
+   - **Hadamard (H) Gates**:
      - Valid: Can be placed on any single qubit at any time step
      - Invalid: Multiple H gates on the same qubit at the same time step (this would be redundant/nonsensical)
-   
+
    - **CNOT Gates**:
      - Valid: Must connect exactly two different qubits (control and target)
      - Invalid: Self-loops (control and target on same qubit)
@@ -438,7 +438,7 @@ After reviewing the UI requirements and existing prototype, I'd like to provide 
 
 **Quantum Scientist Feedback**: From a quantum computing education perspective, the proposed error validation approach is sound. I would add:
    - **Industry Patterns**: Leading quantum development platforms (IBM Quantum Experience, Rigetti Forest, Microsoft Q#) all use some form of inline validation with contextual error messaging
-   - **Error Categorization**: Consider categorizing errors into: 
+   - **Error Categorization**: Consider categorizing errors into:
      * Physical errors (impossible quantum operations)
      * Logical errors (operations that don't make sense in sequence)
      * Educational suggestions (valid but potentially inefficient circuits)
@@ -571,7 +571,7 @@ After discussing the error state visualization options, I've created three diffe
 
 1. **Inline Error Tooltips** ([View Mockup](/ui-design/pocs/error-states/example-1/index.html))
    - **Description**: Errors are shown directly on the problematic gates with small red badges. When users hover over the gate, a tooltip appears with a detailed error message.
-   - **Pros**: 
+   - **Pros**:
      - Minimally invasive to the UI
      - Clear association between the error and the specific gate
      - No permanent screen real estate required
@@ -918,7 +918,7 @@ Based on the above analysis, I recommend the following architectural approaches:
 5. **Iterative Implementation Plan**:
    - Start with core circuit data model and basic H gate rendering
    - Add drag-drop interaction with simple validation
-   - Implement CNOT connection visualization and validation 
+   - Implement CNOT connection visualization and validation
    - Add error display system with basic categorization
    - Enhance with educational features and pattern recognition
 
